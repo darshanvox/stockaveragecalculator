@@ -16,11 +16,9 @@
 </head>
 <body class="bg-[#070b19] text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-900 min-h-screen relative overflow-x-hidden">
 
-    <!-- Vibrant Colorful Ambient Backdrops (Premium Dark Mode Accents) -->
     <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-gradient-to-br from-purple-600/20 to-pink-600/0 rounded-full blur-[120px] glow-sphere pointer-events-none"></div>
     <div class="absolute top-[20%] right-[-10%] w-[45vw] h-[45vw] bg-gradient-to-br from-cyan-500/15 to-emerald-500/0 rounded-full blur-[100px] glow-sphere pointer-events-none" style="animation-delay: 3s;"></div>
 
-    <!-- Navigation Bar -->
     <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#070b19]/70 border-b border-slate-800/80">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-lg font-black tracking-widest bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent transition-all duration-300 hover:brightness-125">
@@ -32,9 +30,7 @@
         </div>
     </nav>
 
-    <!-- Professional Hero Branding Header -->
     <header class="max-w-4xl mx-auto px-6 pt-16 pb-6 text-center relative z-10">
-        
         <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-purple-950/60 via-slate-900/90 to-cyan-950/60 border border-cyan-500/30 backdrop-blur-md rounded-full px-5 py-2 text-xs md:text-sm font-semibold text-slate-200 shadow-2xl shadow-cyan-500/5">
             <span class="flex h-2 w-2 relative">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -44,72 +40,59 @@
         </div>
     </header>
 
-    <!-- Main Dynamic Content Engine -->
     <main class="max-w-4xl mx-auto px-6 pb-24 relative z-10 space-y-16">
-        
-        <!-- SECTION 1: PRECISE STOCK AVERAGE CALCULATOR PANEL -->
         <section class="bg-slate-900/40 backdrop-blur-xl rounded-3xl border border-slate-800/80 p-6 md:p-8 shadow-2xl shadow-slate-950/50">
             <div class="flex items-center gap-3 mb-6">
                 <div class="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white text-sm shadow-md shadow-cyan-500/20">⚙️</div>
                 <div>
                     <h2 class="text-lg font-bold text-white tracking-wide">Stock market average calculator</h2>
-                    <p class="text-xs text-slate-500">Calculate precision metrics for your investment tranches</p>
+                    <p class="text-xs text-slate-500">Enter purchase tranches to evaluate your custom blended positions</p>
                 </div>
             </div>
 
-            <!-- Standardized HTML Form Container to handle browser button click actions safely -->
-            <form id="calcForm" onsubmit="event.preventDefault(); return false;">
-                
-                <!-- Inputs Rows -->
-                <div class="grid md:grid-cols-2 gap-6 mb-6">
-                    <!-- First Purchase Group -->
-                    <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
-                        </h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                                <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                                <input type="number" id="price1" step="any" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
-                            </div>
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
+                            <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
                         </div>
-                    </div>
-
-                    <!-- Second Purchase Group -->
-                    <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
-                        </h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                                <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                                <input type="number" id="price2" step="any" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
-                            </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
+                            <input type="number" id="price1" step="any" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Controls Block (Explicitly matching standard native layout elements) -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                    <button type="button" id="btnCalculate" class="sm:col-span-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 hover:from-cyan-400 hover:via-teal-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-xl shadow-xl shadow-teal-500/10 hover:shadow-teal-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
-                        Calculate Average
-                    </button>
-                    <button type="button" id="btnClear" class="bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
-                        Clear Fields
-                    </button>
+                <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
+                            <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
+                            <input type="number" id="price2" step="any" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-            </form>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                <button type="button" id="btnCalculate" class="sm:col-span-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 hover:from-cyan-400 hover:via-teal-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-xl shadow-xl shadow-teal-500/10 hover:shadow-teal-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
+                    Calculate Average
+                </button>
+                <button type="button" id="btnClear" class="bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
+                    Clear Fields
+                </button>
+            </div>
 
-            <!-- Precision Metric Output Panel -->
             <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800 shadow-inner">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
                     <div class="space-y-1">
@@ -127,16 +110,35 @@
                 </div>
             </div>
         </section>
+    </main>
 
-        <!-- SECTION 2: RESEARCH FEED ARCHIVE -->
-        <section class="space-y-6">
-            <div class="flex items-center gap-4">
-                <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500">My equity research reports</h2>
-                <div class="h-[1px] bg-slate-800 flex-grow"></div>
-            </div>
+    <script type="text/javascript">
+        function runStockMath() {
+            var q1 = parseFloat(document.getElementById('qty1').value) || 0;
+            var p1 = parseFloat(document.getElementById('price1').value) || 0;
+            var q2 = parseFloat(document.getElementById('qty2').value) || 0;
+            var p2 = parseFloat(document.getElementById('price2').value) || 0;
+            var totalUnits = q1 + q2;
+            var totalOutlay = (q1 * p1) + (q2 * p2);
+            var averagePrice = totalUnits > 0 ? totalOutlay / totalUnits : 0;
 
-            <!-- Placeholder Container -->
-            <div class="bg-slate-900/20 rounded-2xl border border-slate-800/40 border-dashed p-10 text-center">
-                <div class="text-2xl mb-2">⏳</div>
-                <p class="text-sm font-medium text-slate-400 tracking-wide">Will be available soon</p>
-                <p class="text-xs text-slate-600 mt-1">Upcoming reports are currently going through valuation audits.</p>
+            document.getElementById('totalQtyDisplay').innerText = totalUnits;
+            document.getElementById('avgPriceDisplay').innerText = "₹" + averagePrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalCostDisplay').innerText = "₹" + totalOutlay.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function resetStockForm() {
+            document.getElementById('qty1').value = '';
+            document.getElementById('price1').value = '';
+            document.getElementById('qty2').value = '';
+            document.getElementById('price2').value = '';
+            document.getElementById('totalQtyDisplay').innerText = '0';
+            document.getElementById('avgPriceDisplay').innerText = '₹0.00';
+            document.getElementById('totalCostDisplay').innerText = '₹0.00';
+        }
+
+        document.getElementById('btnCalculate').onclick = runStockMath;
+        document.getElementById('btnClear').onclick = resetStockForm;
+    </script>
+</body>
+</html>
