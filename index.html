@@ -1,155 +1,427 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpha Insights | Darshan's Financial Intelligence Dashboard</title>
-    <!-- Tailwind CSS Engine -->
-    <script src="https://tailwindcss.com"></script>
-    <style>
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.05); }
-        }
-        .glow-sphere { animation: pulseGlow 8s infinite ease-in-out; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alpha Insights — Stock Average Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --panel: #ffffff;
+    --panel-2: #f7f8fa;
+    --line: rgba(15,23,42,0.10);
+    --line-strong: rgba(15,23,42,0.18);
+    --text: #10131a;
+    --text-dim: #5b6274;
+    --text-faint: #8992a3;
+    --mint: #0f9d6b;
+    --mint-dim: #0c7a53;
+    --amber: #b5720f;
+    --red: #c8433a;
+    --font-display: 'Space Grotesk', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  :root[data-theme="dark"] {
+    --bg: #05070c; --panel: #0c1018; --panel-2: #10151f;
+    --line: rgba(148,163,184,0.14); --line-strong: rgba(148,163,184,0.28);
+    --text: #e7ebf3; --text-dim: #8992a3; --text-faint: #5b6274;
+    --mint: #35e0a1; --mint-dim: #1c8f6a; --amber: #f0a94e; --red: #e2685c;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100%;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 0 20px 64px; }
+  header.top {
+    position: sticky; top: 0; top: env(safe-area-inset-top, 0px);
+    z-index: 20; backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .top-inner {
+    max-width: 620px; margin: 0 auto; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: linear-gradient(160deg, var(--mint), var(--mint-dim));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 14px; color: #04140d;
+    flex-shrink: 0;
+  }
+  .brand-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.01em; }
+  .brand-sub { font-size: 11px; color: var(--text-faint); margin-top: 1px; }
+  .theme-toggle {
+    width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--panel-2); color: var(--text-dim); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px;
+  }
+  .hero { padding: 40px 0 28px; text-align: center; }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 700; font-size: 30px; margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .hero p { color: var(--text-dim); font-size: 14px; margin: 0; }
+  .hero p strong { color: var(--mint); font-weight: 600; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px; margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 0 0 18px;
+  }
+  .card-title span.count { color: var(--text-faint); font-family: var(--font-mono); font-weight: 400; font-size: 12px; }
+
+  .lot {
+    border: 1px solid var(--line); border-radius: 13px; padding: 14px 14px 12px;
+    margin-bottom: 12px; position: relative; background: var(--panel-2);
+  }
+  .lot-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+  }
+  .lot-head .tag {
+    font-size: 11px; text-transform: none; color: var(--text-dim); display: flex; align-items: center; gap: 7px;
+    font-weight: 500;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .lot-remove {
+    background: none; border: none; color: var(--text-faint); font-size: 12px; cursor: pointer;
+    padding: 2px 6px; border-radius: 6px;
+  }
+  .lot-remove:hover { color: var(--red); background: rgba(226,104,92,0.1); }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field label {
+    display: block; font-size: 10.5px; color: var(--text-faint); margin-bottom: 5px;
+    font-weight: 500;
+  }
+  .field input {
+    width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 9px;
+    padding: 9px 10px; font-family: var(--font-mono); font-size: 14px; color: var(--text);
+    transition: border-color .15s;
+  }
+  .field input:focus { outline: none; border-color: var(--mint-dim); }
+  .field input::placeholder { color: var(--text-faint); }
+
+  .add-lot {
+    width: 100%; padding: 11px; border-radius: 11px; border: 1px dashed var(--line-strong);
+    background: transparent; color: var(--text-dim); font-size: 13px; font-weight: 500;
+    cursor: pointer; margin-top: 2px;
+  }
+  .add-lot:hover { border-color: var(--mint-dim); color: var(--mint); }
+
+  .price-row {
+    display: flex; align-items: center; gap: 10px; margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .price-row label { font-size: 12.5px; color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
+  .price-row input {
+    flex: 1; background: var(--panel-2); border: 1px solid var(--line); border-radius: 9px;
+    padding: 9px 10px; font-family: var(--font-mono); font-size: 14px; color: var(--amber);
+  }
+  .price-row input:focus { outline: none; border-color: var(--amber); }
+
+  .actions { display: flex; gap: 10px; margin: 18px 0; }
+  .btn {
+    flex: 1; padding: 14px; border-radius: 13px; border: none; font-size: 12.5px;
+    font-weight: 600; cursor: pointer; letter-spacing: 0.01em; font-family: var(--font-body);
+  }
+  .btn-ghost { background: var(--panel-2); color: var(--text-dim); border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--line-strong); color: var(--text); }
+  .btn-primary { background: var(--mint); color: #04140d; }
+  .btn-primary:hover { background: #4ee9b0; }
+  .btn-primary:active, .btn-ghost:active { transform: scale(0.98); }
+
+  .results { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
+  .stat { background: var(--panel); padding: 18px 14px; text-align: center; }
+  .stat .lbl { font-size: 10.5px; color: var(--text-faint); font-weight: 500; margin-bottom: 6px; }
+  .stat .val { font-family: var(--font-mono); font-weight: 700; font-size: 19px; }
+  .stat .val.mint { color: var(--mint); }
+
+  .gauge-wrap { padding: 20px 4px 4px; }
+  .gauge-labels { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-faint); font-family: var(--font-mono); margin-bottom: 8px; }
+  .gauge {
+    position: relative; height: 10px; border-radius: 6px; background: var(--panel-2);
+    border: 1px solid var(--line); overflow: visible;
+  }
+  .gauge-fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 6px; background: linear-gradient(90deg, var(--mint-dim), var(--mint)); width: 0%; transition: width .4s ease; }
+  .gauge-marker {
+    position: absolute; top: -6px; width: 2px; height: 22px; background: var(--text);
+    transform: translateX(-1px); transition: left .4s ease;
+  }
+  .gauge-marker .mk-label {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 9.5px; font-family: var(--font-mono); color: var(--text); white-space: nowrap; font-weight: 600;
+  }
+  .gauge-marker.cur { background: var(--amber); }
+  .gauge-marker.cur .mk-label { color: var(--amber); }
+
+  .pnl-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 0 4px;
+    font-size: 13px;
+  }
+  .pnl-row .pl-label { color: var(--text-dim); }
+  .pnl-row .pl-val { font-family: var(--font-mono); font-weight: 700; font-size: 15px; }
+  .pl-val.up { color: var(--mint); }
+  .pl-val.down { color: var(--red); }
+
+  .note {
+    font-size: 12px; color: var(--text-faint); text-align: center; margin-top: 18px; line-height: 1.6;
+  }
+  .hidden { display: none !important; }
+</style>
 </head>
-<body class="bg-[#030712] text-slate-100 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-emerald-500 selection:text-slate-900">
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-name">Alpha Insights</div>
+        <div class="brand-sub">Darshan · CFA Level 2 Candidate</div>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+  </div>
+</header>
 
-    <!-- Ambient Visual Glow Effects -->
-    <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-gradient-to-br from-emerald-600/10 to-transparent rounded-full blur-[140px] glow-sphere pointer-events-none"></div>
-    <div class="absolute top-[30%] right-[-10%] w-[45vw] h-[45vw] bg-gradient-to-br from-teal-500/10 to-transparent rounded-full blur-[100px] glow-sphere pointer-events-none" style="animation-delay: 3s;"></div>
+<div class="wrap">
+  <div class="hero">
+    <h1>Stock average calculator</h1>
+    <p>Work out your <strong>average cost per share</strong> across multiple buys, and see how it stacks up against the market.</p>
+  </div>
 
-    <!-- Navigation Header Bar -->
-    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#030712]/75 border-b border-slate-900/60">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-            <span class="text-xs font-black tracking-widest bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                📊 ALPHA INSIGHTS
-            </span>
-        </div>
-    </nav>
+  <div class="card">
+    <div class="card-title">Your purchases <span class="count" id="lotCount">2 lots</span></div>
+    <div id="lots"></div>
+    <button class="add-lot" id="addLot" type="button">+ Add another purchase</button>
 
-    
-    <header class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center relative z-10">
-        <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">ALPHA INSIGHTS</h1>
-        <p class="text-xs md:text-sm font-medium text-slate-400 tracking-wide">
-            Hi, I am <span class="text-slate-200 font-semibold">Darshan</span>, a <span class="text-emerald-400 font-bold">CFA Level 2 Candidate</span>
-        </p>
-    </header>
+    <div class="price-row">
+      <label for="curPrice">Current market price</label>
+      <input type="number" id="curPrice" step="any" placeholder="Optional">
+    </div>
+  </div>
 
-    <!-- Main Content Container matching structural layout order -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 pb-24 relative z-10">
-        <div class="bg-slate-900/20 rounded-2xl border border-slate-800/80 p-5 sm:p-6 shadow-2xl">
-            
-            <h2 class="text-base font-bold text-white tracking-wide border-b border-slate-800/60 pb-3 mb-6">
-                Stock market average calculator
-            </h2>
+  <div class="actions">
+    <button class="btn btn-ghost" id="btnClear" type="button">Clear all</button>
+    <button class="btn btn-primary" id="btnCalculate" type="button">Calculate average</button>
+  </div>
 
-            <!-- Segment 1: Purchase Tranches inputs stack sequentially downwards -->
-            <div class="space-y-6 mb-6">
-                
-                <!-- First Purchase Row Block -->
-                <div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-4">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                            <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                            <input type="number" id="price1" step="any" placeholder="Price per share" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                    </div>
-                </div>
+  <div class="card">
+    <div class="results">
+      <div class="stat">
+        <div class="lbl">Total units</div>
+        <div class="val" id="totalQty">0</div>
+      </div>
+      <div class="stat">
+        <div class="lbl">Average price</div>
+        <div class="val mint" id="avgPrice">0.00</div>
+      </div>
+      <div class="stat">
+        <div class="lbl">Total invested</div>
+        <div class="val" id="totalCost">0.00</div>
+      </div>
+    </div>
 
-                <!-- Second Purchase Row Block -->
-                <div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-4">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                            <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                            <input type="number" id="price2" step="any" placeholder="Price per share" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                    </div>
-                </div>
+    <div class="gauge-wrap" id="gaugeSection">
+      <div class="gauge-labels">
+        <span id="gaugeLow">–</span>
+        <span id="gaugeHigh">–</span>
+      </div>
+      <div class="gauge">
+        <div class="gauge-fill" id="gaugeFill"></div>
+        <div class="gauge-marker" id="avgMarker"><span class="mk-label" id="avgMarkerLabel">avg</span></div>
+        <div class="gauge-marker cur hidden" id="curMarker"><span class="mk-label" id="curMarkerLabel">now</span></div>
+      </div>
+    </div>
 
-            </div>
+    <div class="pnl-row hidden" id="pnlRow">
+      <span class="pl-label">Unrealized P&amp;L at current price</span>
+      <span class="pl-val" id="pnlVal">0.00</span>
+    </div>
+  </div>
 
-            <!-- Segment 2: Control buttons position immediately below inputs -->
-            <div class="flex flex-col sm:flex-row gap-3 mb-8">
-                <button type="button" id="btnClear" class="sm:w-1/3 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 text-slate-300 font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl transition-colors cursor-pointer select-none">
-                    Clear Fields
-                </button>
-                <button type="button" id="btnCalculate" class="sm:w-2/3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all cursor-pointer select-none">
-                    Calculate Average
-                </button>
-            </div>
+  <p class="note">Buying more shares at a lower price than your current average will pull the average down — this tool shows exactly where the new average lands.</p>
+</div>
 
-            <!-- Segment 3: Consolidated Metrics Display Window at the very bottom -->
-            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 rounded-xl border border-slate-800/80 shadow-inner">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
-                    <div class="space-y-1">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Units</span>
-                        <div class="text-2xl font-black text-white font-mono tracking-tight" id="totalQtyDisplay">0</div>
-                    </div>
-                    <div class="space-y-1 border-y md:border-y-0 md:border-x border-slate-800/60 py-4 md:py-0 md:px-6">                
-                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Average Price</span>
-                        <div class="text-2xl font-black text-[#10b981] font-mono tracking-tight drop-shadow-[0_2px_8px_rgba(16,185,129,0.1)]" id="avgPriceDisplay">0.00</div>
-                    </div>
-                    <div class="space-y-1 md:pl-6">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Outlay</span>
-                        <div class="text-2xl font-black text-[#10b981] font-mono tracking-tight drop-shadow-[0_4px_12px_rgba(16,185,129,0.15)]" id="totalCostDisplay">0.00</div>
-                    </div>
-                </div>
-            </div>
+<script>
+(function() {
+  var lotsEl = document.getElementById('lots');
+  var lotCountEl = document.getElementById('lotCount');
+  var nextId = 1;
+  var colors = ['#35e0a1', '#f0a94e', '#7dd3fc', '#e2685c', '#c4b5fd', '#fca5a5'];
 
-        </div>
-    </main>
+  function addLot(qty, price) {
+    var id = 'lot' + (nextId++);
+    var idx = lotsEl.children.length;
+    var div = document.createElement('div');
+    div.className = 'lot';
+    div.dataset.id = id;
+    div.innerHTML =
+      '<div class="lot-head">' +
+        '<span class="tag"><span class="dot" style="background:' + colors[idx % colors.length] + '"></span>Purchase ' + (idx + 1) + '</span>' +
+        '<button type="button" class="lot-remove" data-remove="' + id + '">remove</button>' +
+      '</div>' +
+      '<div class="fields">' +
+        '<div class="field"><label>Units</label><input type="number" step="any" class="qty-input" placeholder="e.g. 50"></div>' +
+        '<div class="field"><label>Price per share</label><input type="number" step="any" class="price-input" placeholder="e.g. 142.50"></div>' +
+      '</div>';
+    lotsEl.appendChild(div);
+    if (qty !== undefined) div.querySelector('.qty-input').value = qty;
+    if (price !== undefined) div.querySelector('.price-input').value = price;
+    refreshLotLabels();
+  }
 
-    <!-- Verified Mathematical Engine Logic Scripts -->
-    <script>
-        const btnCalculate = document.getElementById('btnCalculate');
-        const btnClear = document.getElementById('btnClear');
+  function refreshLotLabels() {
+    var children = Array.prototype.slice.call(lotsEl.children);
+    children.forEach(function(div, idx) {
+      var tag = div.querySelector('.tag');
+      tag.innerHTML = '<span class="dot" style="background:' + colors[idx % colors.length] + '"></span>Purchase ' + (idx + 1);
+    });
+    lotCountEl.textContent = children.length + (children.length === 1 ? ' lot' : ' lots');
+    var removeButtons = lotsEl.querySelectorAll('.lot-remove');
+    removeButtons.forEach(function(btn) {
+      btn.style.visibility = children.length > 1 ? 'visible' : 'hidden';
+    });
+  }
 
-        function runCostAveraging() {
-            // Read values safely, defaulting to 0 if empty string or invalid number
-            const q1 = parseFloat(document.getElementById('qty1').value) || 0;
-            const p1 = parseFloat(document.getElementById('price1').value) || 0;
-            const q2 = parseFloat(document.getElementById('qty2').value) || 0;
-            const p2 = parseFloat(document.getElementById('price2').value) || 0;
+  lotsEl.addEventListener('click', function(e) {
+    var target = e.target.closest('[data-remove]');
+    if (!target) return;
+    if (lotsEl.children.length <= 1) return;
+    var id = target.getAttribute('data-remove');
+    var div = lotsEl.querySelector('[data-id="' + id + '"]');
+    if (div) div.remove();
+    refreshLotLabels();
+    runCostAveraging();
+  });
 
-            // Compute values safely
-            const totalQty = q1 + q2;
-            const totalOutlay = (q1 * p1) + (q2 * p2);
-            
-            // Avoid division by zero errors if no units are entered
-            const avgPrice = totalQty > 0 ? (totalOutlay / totalQty) : 0;
+  document.getElementById('addLot').addEventListener('click', function() {
+    addLot();
+  });
 
-            // Reflect state adjustments onto output displays instantly
-            document.getElementById('totalQtyDisplay').textContent = totalQty.toLocaleString();
-            document.getElementById('avgPriceDisplay').textContent = avgPrice.toFixed(2);
-            document.getElementById('totalCostDisplay').textContent = totalOutlay.toLocaleString(undefined, {
-                minimumFractionDigits: 2, 
-                maximumFractionDigits: 2
-            });
-        }
+  function fmt(n) {
+    return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
 
-        function resetCalculator() {
-            // Wipe user input fields completely
-            document.getElementById('qty1').value = '';
-            document.getElementById('price1').value = '';
-            document.getElementById('qty2').value = '';
-            document.getElementById('price2').value = '';
-            
-            // Revert state values back to structural default zeros
-            document.getElementById('totalQtyDisplay').textContent = '0';
-            document.getElementById('avgPriceDisplay').textContent = '0.00';
+  function runCostAveraging() {
+    var qtyInputs = lotsEl.querySelectorAll('.qty-input');
+    var priceInputs = lotsEl.querySelectorAll('.price-input');
+    var totalQty = 0, totalCost = 0;
+    var validPrices = [];
+
+    for (var i = 0; i < qtyInputs.length; i++) {
+      var q = parseFloat(qtyInputs[i].value) || 0;
+      var p = parseFloat(priceInputs[i].value) || 0;
+      if (q > 0 && p > 0) {
+        totalQty += q;
+        totalCost += q * p;
+        validPrices.push(p);
+      }
+    }
+
+    var avgPrice = totalQty > 0 ? (totalCost / totalQty) : 0;
+
+    document.getElementById('totalQty').textContent = totalQty.toLocaleString();
+    document.getElementById('avgPrice').textContent = fmt(avgPrice);
+    document.getElementById('totalCost').textContent = fmt(totalCost);
+
+    var curPriceVal = parseFloat(document.getElementById('curPrice').value) || 0;
+    var pnlRow = document.getElementById('pnlRow');
+    var curMarker = document.getElementById('curMarker');
+
+    if (validPrices.length > 0) {
+      var lo = Math.min.apply(null, validPrices.concat(curPriceVal > 0 ? [curPriceVal] : []));
+      var hi = Math.max.apply(null, validPrices.concat(curPriceVal > 0 ? [curPriceVal] : []));
+      if (lo === hi) { lo = lo * 0.9; hi = hi * 1.1; }
+      var span = hi - lo;
+      var avgPct = span > 0 ? ((avgPrice - lo) / span) * 100 : 50;
+      avgPct = Math.max(0, Math.min(100, avgPct));
+
+      document.getElementById('gaugeLow').textContent = fmt(lo);
+      document.getElementById('gaugeHigh').textContent = fmt(hi);
+      document.getElementById('gaugeFill').style.width = avgPct + '%';
+      document.getElementById('avgMarker').style.left = avgPct + '%';
+      document.getElementById('avgMarkerLabel').textContent = 'avg ' + fmt(avgPrice);
+
+      if (curPriceVal > 0) {
+        var curPct = span > 0 ? ((curPriceVal - lo) / span) * 100 : 50;
+        curPct = Math.max(0, Math.min(100, curPct));
+        curMarker.classList.remove('hidden');
+        curMarker.style.left = curPct + '%';
+        document.getElementById('curMarkerLabel').textContent = 'now ' + fmt(curPriceVal);
+
+        var pnl = (curPriceVal - avgPrice) * totalQty;
+        var pnlPct = avgPrice > 0 ? ((curPriceVal - avgPrice) / avgPrice) * 100 : 0;
+        pnlRow.classList.remove('hidden');
+        var pnlVal = document.getElementById('pnlVal');
+        pnlVal.textContent = (pnl >= 0 ? '+' : '') + fmt(pnl) + '  (' + (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(1) + '%)';
+        pnlVal.className = 'pl-val ' + (pnl >= 0 ? 'up' : 'down');
+      } else {
+        curMarker.classList.add('hidden');
+        pnlRow.classList.add('hidden');
+      }
+    } else {
+      document.getElementById('gaugeLow').textContent = '–';
+      document.getElementById('gaugeHigh').textContent = '–';
+      document.getElementById('gaugeFill').style.width = '0%';
+      document.getElementById('avgMarker').style.left = '0%';
+      document.getElementById('avgMarkerLabel').textContent = 'avg';
+      curMarker.classList.add('hidden');
+      pnlRow.classList.add('hidden');
+    }
+  }
+
+  function resetCalculator() {
+    lotsEl.innerHTML = '';
+    nextId = 1;
+    addLot();
+    addLot();
+    document.getElementById('curPrice').value = '';
+    runCostAveraging();
+  }
+
+  document.getElementById('btnCalculate').addEventListener('click', runCostAveraging);
+  document.getElementById('btnClear').addEventListener('click', resetCalculator);
+
+  document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('qty-input') || e.target.classList.contains('price-input') || e.target.id === 'curPrice') {
+      runCostAveraging();
+    }
+  });
+
+  var themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', function() {
+    var root = document.documentElement;
+    var current = root.getAttribute('data-theme');
+    if (current === 'dark') {
+      root.setAttribute('data-theme', 'light');
+      themeToggle.textContent = '◑';
+    } else {
+      root.setAttribute('data-theme', 'dark');
+      themeToggle.textContent = '◐';
+    }
+  });
+
+  addLot(10, 145.30);
+  addLot(15, 132.75);
+  runCostAveraging();
+})();
+</script>
+</body>
+</html>
