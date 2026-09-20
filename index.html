@@ -527,7 +527,11 @@
         <span class="empty-state" style="padding:6px 0; display:block; text-align:left;" id="reportDetailDate"></span>
       </div>
       <div class="report-frame-wrap">
-        <iframe id="reportFrame" title="Report viewer" src=""></iframe>
+        <iframe id="reportFrame" title="Report viewer" src="" class="hidden"></iframe>
+        <div class="empty-state hidden" id="reportFrameError" style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+          <span>Couldn't load this file. The path in reports.json probably doesn't match the file on GitHub.</span>
+          <a id="reportFrameFallback" href="#" target="_blank" rel="noopener" class="linklike" style="font-size:12.5px;">Try opening it directly →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -535,33 +539,47 @@
   <section id="knowledge" class="page">
     <div class="section-head">
       <h2>Financial knowledge hub</h2>
-      <p>Notes, frameworks and concepts worth remembering.</p>
+      <p>Tap a topic to read the full note.</p>
     </div>
 
-    <div class="card">
-      <div id="knowledgeList"><div class="empty-state">Loading notes…</div></div>
-      <button class="toggle-form-btn" id="toggleKnowledgeForm" type="button">+ Add a note</button>
+    <div id="knowledgeListView">
+      <div class="card">
+        <div id="knowledgeList"><div class="empty-state">Loading notes…</div></div>
+        <button class="toggle-form-btn" id="toggleKnowledgeForm" type="button">+ Add a note</button>
 
-      <div id="knowledgeForm" class="hidden" style="margin-top:14px;">
-        <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
-          <div class="field"><label>Title</label><input type="text" id="knTitle" placeholder="e.g. Reading a DCF"></div>
-          <div class="field">
-            <label>Category</label>
-            <select id="knCategory">
-              <option>Fundamentals</option>
-              <option>Technicals</option>
-              <option>Valuation</option>
-              <option>Macro</option>
-              <option>Other</option>
-            </select>
+        <div id="knowledgeForm" class="hidden" style="margin-top:14px;">
+          <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+            <div class="field"><label>Title</label><input type="text" id="knTitle" placeholder="e.g. Reading a DCF"></div>
+            <div class="field">
+              <label>Category</label>
+              <select id="knCategory">
+                <option>Fundamentals</option>
+                <option>Technicals</option>
+                <option>Valuation</option>
+                <option>Macro</option>
+                <option>Other</option>
+              </select>
+            </div>
           </div>
+          <div class="field" style="margin-bottom:6px;">
+            <label>Notes</label>
+            <textarea id="knBody" placeholder="Write out the concept, formula, or takeaway" style="min-height:100px;"></textarea>
+          </div>
+          <div class="inline-error hidden" id="knError"></div>
+          <button class="btn btn-primary btn-full" id="knSubmit" type="button">Save note</button>
         </div>
-        <div class="field" style="margin-bottom:6px;">
-          <label>Notes</label>
-          <textarea id="knBody" placeholder="Write out the concept, formula, or takeaway" style="min-height:100px;"></textarea>
+      </div>
+    </div>
+
+    <div id="knowledgeDetailView" class="hidden">
+      <button class="back-btn" id="knowledgeBackBtn" type="button">← Back to knowledge hub</button>
+      <div class="card" style="margin-top:10px;">
+        <div class="item-top" style="margin-bottom:8px;">
+          <p class="item-title" id="knowledgeDetailTitle" style="font-size:16.5px;">–</p>
+          <span class="badge badge-blue hidden" id="knowledgeDetailCategory"></span>
         </div>
-        <div class="inline-error hidden" id="knError"></div>
-        <button class="btn btn-primary btn-full" id="knSubmit" type="button">Save note</button>
+        <p class="item-body" id="knowledgeDetailBody" style="font-size:13.5px;"></p>
+        <span class="empty-state" style="padding:6px 0 0; display:block; text-align:left;" id="knowledgeDetailDate"></span>
       </div>
     </div>
   </section>
@@ -859,9 +877,35 @@
     }
     document.getElementById('reportDetailSummary').textContent = d.summary || '';
     document.getElementById('reportDetailDate').textContent = formatDate(d.createdAt || d.date);
-    document.getElementById('reportFrame').src = d.url || '';
     document.getElementById('reportsListView').classList.add('hidden');
     document.getElementById('reportDetailView').classList.remove('hidden');
+
+    var frame = document.getElementById('reportFrame');
+    var errorBox = document.getElementById('reportFrameError');
+    var fallbackLink = document.getElementById('reportFrameFallback');
+    var url = d.url || '';
+    frame.classList.add('hidden');
+    errorBox.classList.add('hidden');
+    frame.src = '';
+    fallbackLink.href = url || '#';
+
+    if (!url) {
+      errorBox.classList.remove('hidden');
+      return;
+    }
+
+    fetch(url, { method: 'HEAD', cache: 'no-store' }).then(function(res) {
+      if (!res.ok) {
+        errorBox.classList.remove('hidden');
+        return;
+      }
+      frame.src = url;
+      frame.classList.remove('hidden');
+    }).catch(function() {
+      // Cross-origin URL (e.g. claude.ai asset storage) — can't verify with fetch, so just try loading it.
+      frame.src = url;
+      frame.classList.remove('hidden');
+    });
   }
 
   function closeReportDetail() {
@@ -872,22 +916,46 @@
 
   document.getElementById('reportBackBtn').addEventListener('click', closeReportDetail);
 
+  var knowledgeCache = {};
+
   function knowledgeCardHtml(d, id, editable) {
-    return '<div class="item-card">' +
-      '<div class="item-top">' +
-        '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
-        (d.category ? '<span class="badge badge-blue">' + escapeHtml(d.category) + '</span>' : '') +
-      '</div>' +
-      '<p class="item-body clamped">' + escapeHtml(d.body || '') + '</p>' +
-      '<div class="item-foot">' +
-        '<span>' + formatDate(d.createdAt || d.date) + '</span>' +
-        '<div class="actions-mini">' +
-          '<button type="button" class="linklike" data-expand>Read more</button>' +
-          (editable ? '<button type="button" class="linklike del-btn" data-del-knowledge="' + id + '">Delete</button>' : '') +
+    knowledgeCache[id] = d;
+    return '<div class="report-line" data-open-knowledge="' + id + '">' +
+      '<div class="report-line-main">' +
+        '<p class="report-line-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
+        '<div class="report-line-meta">' +
+          (d.category ? '<span class="badge badge-blue">' + escapeHtml(d.category) + '</span>' : '') +
+          '<span>' + formatDate(d.createdAt || d.date) + '</span>' +
         '</div>' +
       '</div>' +
+      (editable ? '<button type="button" class="linklike del-btn" data-del-knowledge="' + id + '">Delete</button>' : '') +
+      '<span class="report-line-arrow">›</span>' +
     '</div>';
   }
+
+  function openKnowledgeDetail(id) {
+    var d = knowledgeCache[id];
+    if (!d) return;
+    document.getElementById('knowledgeDetailTitle').textContent = d.title || 'Untitled';
+    var catEl = document.getElementById('knowledgeDetailCategory');
+    if (d.category) {
+      catEl.textContent = d.category;
+      catEl.classList.remove('hidden');
+    } else {
+      catEl.classList.add('hidden');
+    }
+    document.getElementById('knowledgeDetailBody').textContent = d.body || '';
+    document.getElementById('knowledgeDetailDate').textContent = formatDate(d.createdAt || d.date);
+    document.getElementById('knowledgeListView').classList.add('hidden');
+    document.getElementById('knowledgeDetailView').classList.remove('hidden');
+  }
+
+  function closeKnowledgeDetail() {
+    document.getElementById('knowledgeDetailView').classList.add('hidden');
+    document.getElementById('knowledgeListView').classList.remove('hidden');
+  }
+
+  document.getElementById('knowledgeBackBtn').addEventListener('click', closeKnowledgeDetail);
 
   function subscribeReports() {
     dbNs.collection('reports').orderBy('createdAt', 'desc').limit(50).onSnapshot(function(snap) {
@@ -908,6 +976,7 @@
   function subscribeKnowledge() {
     dbNs.collection('knowledge').orderBy('createdAt', 'desc').limit(100).onSnapshot(function(snap) {
       var list = document.getElementById('knowledgeList');
+      knowledgeCache = {};
       if (!snap.docs || snap.docs.length === 0) {
         list.innerHTML = '<div class="empty-state">No notes yet.</div>';
         return;
@@ -944,6 +1013,7 @@
 
   function loadStaticKnowledge() {
     var list = document.getElementById('knowledgeList');
+    knowledgeCache = {};
     loadStaticJson('knowledge.json').then(function(items) {
       if (!items || items.length === 0) {
         list.innerHTML = '<div class="empty-state">No notes yet. Add one to knowledge.json and push to update this page.</div>';
@@ -974,17 +1044,17 @@
   });
 
   document.getElementById('knowledgeList').addEventListener('click', function(e) {
-    var expandBtn = e.target.closest('[data-expand]');
-    if (expandBtn) {
-      var body = expandBtn.closest('.item-card').querySelector('.item-body');
-      body.classList.toggle('clamped');
-      expandBtn.textContent = body.classList.contains('clamped') ? 'Read more' : 'Show less';
+    var delBtn = e.target.closest('[data-del-knowledge]');
+    if (delBtn) {
+      if (dbNs) {
+        var id = delBtn.getAttribute('data-del-knowledge');
+        dbNs.collection('knowledge').doc(id).delete().catch(function() {});
+      }
       return;
     }
-    var delBtn = e.target.closest('[data-del-knowledge]');
-    if (delBtn && dbNs) {
-      var id = delBtn.getAttribute('data-del-knowledge');
-      dbNs.collection('knowledge').doc(id).delete().catch(function() {});
+    var openLine = e.target.closest('[data-open-knowledge]');
+    if (openLine) {
+      openKnowledgeDetail(openLine.getAttribute('data-open-knowledge'));
     }
   });
 
