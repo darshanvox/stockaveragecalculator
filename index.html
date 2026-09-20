@@ -627,8 +627,8 @@
   }
 
   function showBackendUnavailable() {
-    document.getElementById('reportsList').innerHTML = '<div class="empty-state">Saved reports will show up here once this page is opened on claude.ai.</div>';
-    document.getElementById('knowledgeList').innerHTML = '<div class="empty-state">Saved notes will show up here once this page is opened on claude.ai.</div>';
+    loadStaticReports();
+    loadStaticKnowledge();
     document.getElementById('toggleReportForm').classList.add('hidden');
     document.getElementById('toggleKnowledgeForm').classList.add('hidden');
   }
@@ -645,6 +645,40 @@
   toggleForm('toggleReportForm', 'reportForm');
   toggleForm('toggleKnowledgeForm', 'knowledgeForm');
 
+  function reportCardHtml(d, id, editable) {
+    return '<div class="item-card">' +
+      '<div class="item-top">' +
+        '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
+        (d.ticker ? '<span class="badge badge-mint">' + escapeHtml(d.ticker) + '</span>' : '') +
+      '</div>' +
+      (d.summary ? '<p class="item-body">' + escapeHtml(d.summary) + '</p>' : '') +
+      '<div class="item-foot">' +
+        '<span>' + formatDate(d.createdAt || d.date) + '</span>' +
+        '<div class="actions-mini">' +
+          (d.url ? '<a href="' + d.url + '" target="_blank" rel="noopener">Open PDF</a>' : '') +
+          (editable ? '<button type="button" class="linklike del-btn" data-del-report="' + id + '" data-asset="' + (d.assetId || '') + '">Delete</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function knowledgeCardHtml(d, id, editable) {
+    return '<div class="item-card">' +
+      '<div class="item-top">' +
+        '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
+        (d.category ? '<span class="badge badge-blue">' + escapeHtml(d.category) + '</span>' : '') +
+      '</div>' +
+      '<p class="item-body clamped">' + escapeHtml(d.body || '') + '</p>' +
+      '<div class="item-foot">' +
+        '<span>' + formatDate(d.createdAt || d.date) + '</span>' +
+        '<div class="actions-mini">' +
+          '<button type="button" class="linklike" data-expand>Read more</button>' +
+          (editable ? '<button type="button" class="linklike del-btn" data-del-knowledge="' + id + '">Delete</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
   function subscribeReports() {
     dbNs.collection('reports').orderBy('createdAt', 'desc').limit(50).onSnapshot(function(snap) {
       var list = document.getElementById('reportsList');
@@ -653,21 +687,7 @@
         return;
       }
       list.innerHTML = snap.docs.map(function(doc) {
-        var d = doc.data();
-        return '<div class="item-card">' +
-          '<div class="item-top">' +
-            '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
-            (d.ticker ? '<span class="badge badge-mint">' + escapeHtml(d.ticker) + '</span>' : '') +
-          '</div>' +
-          (d.summary ? '<p class="item-body">' + escapeHtml(d.summary) + '</p>' : '') +
-          '<div class="item-foot">' +
-            '<span>' + formatDate(d.createdAt) + '</span>' +
-            '<div class="actions-mini">' +
-              (d.url ? '<a href="' + d.url + '" target="_blank" rel="noopener">Open PDF</a>' : '') +
-              (isEditor ? '<button type="button" class="linklike del-btn" data-del-report="' + doc.id + '" data-asset="' + (d.assetId || '') + '">Delete</button>' : '') +
-            '</div>' +
-          '</div>' +
-        '</div>';
+        return reportCardHtml(doc.data(), doc.id, isEditor);
       }).join('');
     }, function() {
       document.getElementById('reportsList').innerHTML = '<div class="empty-state">Couldn\'t load reports right now.</div>';
@@ -682,24 +702,45 @@
         return;
       }
       list.innerHTML = snap.docs.map(function(doc) {
-        var d = doc.data();
-        return '<div class="item-card">' +
-          '<div class="item-top">' +
-            '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
-            (d.category ? '<span class="badge badge-blue">' + escapeHtml(d.category) + '</span>' : '') +
-          '</div>' +
-          '<p class="item-body clamped" data-full="' + escapeHtml(d.body || '') + '">' + escapeHtml(d.body || '') + '</p>' +
-          '<div class="item-foot">' +
-            '<span>' + formatDate(d.createdAt) + '</span>' +
-            '<div class="actions-mini">' +
-              '<button type="button" class="linklike" data-expand>Read more</button>' +
-              (isEditor ? '<button type="button" class="linklike del-btn" data-del-knowledge="' + doc.id + '">Delete</button>' : '') +
-            '</div>' +
-          '</div>' +
-        '</div>';
+        return knowledgeCardHtml(doc.data(), doc.id, isEditor);
       }).join('');
     }, function() {
       document.getElementById('knowledgeList').innerHTML = '<div class="empty-state">Couldn\'t load notes right now.</div>';
+    });
+  }
+
+  function loadStaticJson(path) {
+    return fetch(path).then(function(res) {
+      if (!res.ok) throw new Error('not found');
+      return res.json();
+    });
+  }
+
+  function loadStaticReports() {
+    var list = document.getElementById('reportsList');
+    loadStaticJson('reports.json').then(function(items) {
+      if (!items || items.length === 0) {
+        list.innerHTML = '<div class="empty-state">No reports yet. Add one to reports.json and push to update this page.</div>';
+        return;
+      }
+      items = items.slice().sort(function(a, b) { return new Date(b.date || 0) - new Date(a.date || 0); });
+      list.innerHTML = items.map(function(d, i) { return reportCardHtml(d, 'static-' + i, false); }).join('');
+    }).catch(function() {
+      list.innerHTML = '<div class="empty-state">No reports.json found yet. Add one alongside this page to list reports here.</div>';
+    });
+  }
+
+  function loadStaticKnowledge() {
+    var list = document.getElementById('knowledgeList');
+    loadStaticJson('knowledge.json').then(function(items) {
+      if (!items || items.length === 0) {
+        list.innerHTML = '<div class="empty-state">No notes yet. Add one to knowledge.json and push to update this page.</div>';
+        return;
+      }
+      items = items.slice().sort(function(a, b) { return new Date(b.date || 0) - new Date(a.date || 0); });
+      list.innerHTML = items.map(function(d, i) { return knowledgeCardHtml(d, 'static-' + i, false); }).join('');
+    }).catch(function() {
+      list.innerHTML = '<div class="empty-state">No knowledge.json found yet. Add one alongside this page to list notes here.</div>';
     });
   }
 
