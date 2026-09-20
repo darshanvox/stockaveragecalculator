@@ -47,13 +47,13 @@
     <!-- Main Dynamic Content Engine -->
     <main class="max-w-4xl mx-auto px-6 pb-24 relative z-10 space-y-16">
         
-        <!-- SECTION 1: PRECISE STOCK AVERAGE CALCULATOR -->
+        <!-- SECTION 1: WORKING STOCK AVERAGE CALCULATOR -->
         <section class="bg-slate-900/40 backdrop-blur-xl rounded-3xl border border-slate-800/80 p-6 md:p-8 shadow-2xl shadow-slate-950/50">
             <div class="flex items-center gap-3 mb-6">
                 <div class="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white text-sm shadow-md shadow-cyan-500/20">⚙️</div>
                 <div>
-                    <h2 class="text-lg font-bold text-white tracking-wide">Stock Market Average Calculator</h2>
-                    <p class="text-xs text-slate-500">Calculate custom multi-purchase share averages</p>
+                    <h2 class="text-lg font-bold text-white tracking-wide">Stock market average calculator</h2>
+                    <p class="text-xs text-slate-500">Enter purchase tranches to evaluate your custom blended positions</p>
                 </div>
             </div>
 
@@ -67,11 +67,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                            <input type="number" id="qty1" placeholder="Units" oninput="calculateAverage()" onkeyup="calculateAverage()" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
+                            <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                            <input type="number" id="price1" placeholder="Price per share" oninput="calculateAverage()" onkeyup="calculateAverage()" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
+                            <input type="number" id="price1" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
                         </div>
                     </div>
                 </div>
@@ -84,22 +84,22 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                            <input type="number" id="qty2" placeholder="Units" oninput="calculateAverage()" onkeyup="calculateAverage()" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
+                            <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                            <input type="number" id="price2" placeholder="Price per share" oninput="calculateAverage()" onkeyup="calculateAverage()" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
+                            <input type="number" id="price2" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Action Controls Block -->
+            <!-- Action Controls Block (Exactly wired to trigger only on manual click) -->
             <div class="flex flex-col sm:flex-row gap-3 mb-6">
-                <button type="button" onclick="calculateAverage()" class="flex-grow text-center bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 hover:from-cyan-400 hover:via-teal-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-xl shadow-xl shadow-teal-500/10 hover:shadow-teal-500/20 hover:-translate-y-0.5 transition-all duration-300 block select-none cursor-pointer">
+                <button type="button" onclick="executeCalculation()" class="flex-grow text-center bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 hover:from-cyan-400 hover:via-teal-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-xl shadow-xl shadow-teal-500/10 hover:shadow-teal-500/20 hover:-translate-y-0.5 transition-all duration-300 block cursor-pointer select-none">
                     Calculate Average
                 </button>
-                <button type="button" onclick="clearFields()" class="sm:w-1/3 text-center bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-xl hover:-translate-y-0.5 transition-all duration-300 block select-none cursor-pointer">
+                <button type="button" onclick="executeReset()" class="sm:w-1/3 text-center bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-xl hover:-translate-y-0.5 transition-all duration-300 block cursor-pointer select-none">
                     Clear Fields
                 </button>
             </div>
@@ -140,3 +140,5 @@
 
         <!-- SEBI Guidelines Disclosure Box -->
         <section class="bg-slate-950/90 border border-amber-500/10 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-full bg-amber-500/30"></div>
+            <div class="flex gap-3.5 items-start">
