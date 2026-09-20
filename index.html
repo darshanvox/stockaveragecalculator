@@ -26,9 +26,6 @@
             <span class="text-xs font-black tracking-widest bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 📊 ALPHA INSIGHTS
             </span>
-            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                Live Portal
-            </span>
         </div>
     </nav>
 
@@ -145,10 +142,13 @@
         }
 
         function resetCalculator() {
-            // Wipe standard user input fields
+            // Wipe user input fields
             document.getElementById('qty1').value = '';
             document.getElementById('price1').value = '';
             document.getElementById('qty2').value = '';
             document.getElementById('price2').value = '';
             
             // Revert state values back to structural default zeros
+            document.getElementById('totalQtyDisplay').textContent = '0';
+            document.getElementById('avgPriceDisplay').textContent = '0.00';
+            document.getElementById('totalCostDisplay').textContent = '0.00';
