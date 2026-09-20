@@ -121,15 +121,17 @@
         const btnClear = document.getElementById('btnClear');
 
         function runCostAveraging() {
-            // Read value configurations from user input fields safely
-            const q1 = Math.max(0, parseFloat(document.getElementById('qty1').value) || 0);
-            const p1 = Math.max(0, parseFloat(document.getElementById('price1').value) || 0);
-            const q2 = Math.max(0, parseFloat(document.getElementById('qty2').value) || 0);
-            const p2 = Math.max(0, parseFloat(document.getElementById('price2').value) || 0);
+            // Read values safely, defaulting to 0 if empty string or invalid number
+            const q1 = parseFloat(document.getElementById('qty1').value) || 0;
+            const p1 = parseFloat(document.getElementById('price1').value) || 0;
+            const q2 = parseFloat(document.getElementById('qty2').value) || 0;
+            const p2 = parseFloat(document.getElementById('price2').value) || 0;
 
-            // Compute math metrics
+            // Compute values safely
             const totalQty = q1 + q2;
             const totalOutlay = (q1 * p1) + (q2 * p2);
+            
+            // Avoid division by zero errors if no units are entered
             const avgPrice = totalQty > 0 ? (totalOutlay / totalQty) : 0;
 
             // Reflect state adjustments onto output displays instantly
@@ -142,7 +144,7 @@
         }
 
         function resetCalculator() {
-            // Wipe user input fields
+            // Wipe user input fields completely
             document.getElementById('qty1').value = '';
             document.getElementById('price1').value = '';
             document.getElementById('qty2').value = '';
@@ -151,4 +153,3 @@
             // Revert state values back to structural default zeros
             document.getElementById('totalQtyDisplay').textContent = '0';
             document.getElementById('avgPriceDisplay').textContent = '0.00';
-            document.getElementById('totalCostDisplay').textContent = '0.00';
