@@ -3,142 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpha Insights | Darshan's Financial Intelligence Dashboard</title>
+    <title>Alpha Insights | Elite Financial Intelligence</title>
     <!-- Tailwind CSS Engine -->
     <script src="https://tailwindcss.com"></script>
     <style>
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
+        /* Smooth pulsating background glow animations */
+        @keyframes meshGlow {
+            0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.4; }
+            33% { transform: translate(40px, -60px) scale(1.1); opacity: 0.6; }
+            66% { transform: translate(-30px, 20px) scale(0.95); opacity: 0.5; }
         }
-        .glow-sphere { animation: pulseGlow 6s infinite ease-in-out; }
+        .animate-mesh-1 { animation: meshGlow 10s infinite ease-in-out; }
+        .animate-mesh-2 { animation: meshGlow 12s infinite ease-in-out; animation-delay: 2s; }
     </style>
 </head>
-<body class="bg-[#070b19] text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-900 min-h-screen relative overflow-x-hidden">
+<body class="bg-[#030712] text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-900 min-h-screen relative overflow-x-hidden">
 
-    <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-gradient-to-br from-purple-600/20 to-pink-600/0 rounded-full blur-[120px] glow-sphere pointer-events-none"></div>
-    <div class="absolute top-[20%] right-[-10%] w-[45vw] h-[45vw] bg-gradient-to-br from-cyan-500/15 to-emerald-500/0 rounded-full blur-[100px] glow-sphere pointer-events-none" style="animation-delay: 3s;"></div>
+    <!-- Trendy Floating Neon Orbs (Background Accents) -->
+    <div class="absolute top-[-10%] left-[-5%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-fuchsia-600/10 via-purple-600/10 to-transparent blur-[130px] animate-mesh-1 pointer-events-none"></div>
+    <div class="absolute top-[30%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-cyan-500/15 via-emerald-500/5 to-transparent blur-[110px] animate-mesh-2 pointer-events-none"></div>
 
-    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#070b19]/70 border-b border-slate-800/80">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-lg font-black tracking-widest bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent transition-all duration-300 hover:brightness-125">
-                📊 ALPHA INSIGHTS
+    <!-- 🌟 STICKY HEADER: Ultra-Modern Glassmorphic Navbar -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-[#030712]/75 border-b border-slate-800/80 shadow-lg shadow-slate-950/20">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Brand Logo with Gradient Pop -->
+            <a href="index.html" class="text-xl font-black tracking-widest bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent hover:brightness-125 transition duration-300">
+                ⚡ ALPHA INSIGHTS
             </a>
-            <span class="text-xs font-mono font-bold text-slate-500 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full uppercase tracking-wider">
-                Live Portal
-            </span>
+            <!-- Premium Status Tag -->
+            <div class="flex items-center gap-2 bg-slate-900/90 border border-slate-800/80 rounded-xl px-3.5 py-1.5 shadow-inner">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                </span>
+                <span class="text-[10px] font-mono font-black tracking-wider text-slate-400 uppercase">Live Engine v2.4</span>
+            </div>
         </div>
     </nav>
 
-    <header class="max-w-4xl mx-auto px-6 pt-16 pb-6 text-center relative z-10">
-        <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-purple-950/60 via-slate-900/90 to-cyan-950/60 border border-cyan-500/30 backdrop-blur-md rounded-full px-5 py-2 text-xs md:text-sm font-semibold text-slate-200 shadow-2xl shadow-cyan-500/5">
-            <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
-            </span>
-            Hi, I am <span class="text-cyan-400 font-bold">Darshan</span>, a CFA Level 2 Candidate
+    
+    <header class="max-w-4xl mx-auto px-6 pt-12 pb-2 text-center relative z-10">
+        <!-- Trendy Cyberpunk Profile Pill -->
+        <div class="inline-flex items-center gap-2.5 bg-slate-900/60 border border-purple-500/30 backdrop-blur-md rounded-2xl px-5 py-2.5 text-xs md:text-sm font-bold text-slate-200 shadow-2xl tracking-wide">
+            <span class="text-purple-400">⚡</span>
+            Hi, I am <span class="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent font-black">Darshan</span>, a CFA Level 2 Candidate
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-6 pb-24 relative z-10 space-y-16">
-        <section class="bg-slate-900/40 backdrop-blur-xl rounded-3xl border border-slate-800/80 p-6 md:p-8 shadow-2xl shadow-slate-950/50">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white text-sm shadow-md shadow-cyan-500/20">⚙️</div>
-                <div>
-                    <h2 class="text-lg font-bold text-white tracking-wide">Stock market average calculator</h2>
-                    <p class="text-xs text-slate-500">Enter purchase tranches to evaluate your custom blended positions</p>
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto px-6 pb-24 relative z-10 space-y-12">
+        
+        <!-- 📦 CALCULATOR CONTAINER: Outer Gradient Neon Border Wrap -->
+        <section class="p-[1px] bg-gradient-to-br from-slate-800 via-cyan-500/30 to-purple-500/20 rounded-3xl shadow-2xl shadow-slate-950/70">
+            <!-- Inner Box Content -->
+            <div class="bg-[#090f24]/90 backdrop-blur-2xl rounded-[23px] p-6 md:p-8 space-y-8">
+                
+                <!-- Title Header Inside Card -->
+                <div class="flex items-center gap-3.5 border-b border-slate-800/80 pb-5">
+                    <div class="p-2.5 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 text-white shadow-xl shadow-cyan-500/10 text-sm">🤖</div>
+                    <div>
+                        <h2 class="text-lg font-black tracking-wide text-white uppercase">Stock market average calculator</h2>
+                        <p class="text-xs text-slate-400 font-light">Evaluate custom positioning matrices across discrete entry tranches</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
-                    </h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                            <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
+                <!-- Input Grid Field Sections -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Tranche 1 Frame -->
+                    <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/40 hover:border-slate-800/90 transition duration-300">
+                        <h3 class="text-xs font-black text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400"></span> First Purchase
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Units</label>
+                                <input type="number" id="qty1" placeholder="0" class="w-full bg-[#030712] border border-slate-800/80 rounded-xl px-4 py-2.5 text-sm text-white font-bold focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Price / Share</label>
+                                <input type="number" id="price1" step="any" placeholder="₹0.00" class="w-full bg-[#030712] border border-slate-800/80 rounded-xl px-4 py-2.5 text-sm text-white font-bold focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                            <input type="number" id="price1" step="any" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-cyan-400 transition-colors">
+                    </div>
+
+                    <!-- Tranche 2 Frame -->
+                    <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/40 hover:border-slate-800/90 transition duration-300">
+                        <h3 class="text-xs font-black text-purple-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-lg shadow-purple-400"></span> Second Purchase
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Units</label>
+                                <input type="number" id="qty2" placeholder="0" class="w-full bg-[#030712] border border-slate-800/80 rounded-xl px-4 py-2.5 text-sm text-white font-bold focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400/20 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Price / Share</label>
+                                <input type="number" id="price2" step="any" placeholder="₹0.00" class="w-full bg-[#030712] border border-slate-800/80 rounded-xl px-4 py-2.5 text-sm text-white font-bold focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400/20 transition-all">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/50">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
-                    </h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                            <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                            <input type="number" id="price2" step="any" placeholder="Price per share" class="w-full bg-[#070b19] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-400 transition-colors">
-                        </div>
-                    </div>
+                <!-- 🚀 BUTTONS: Trendy High-Pop Neo-morphic Shadows -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <button type="button" id="btnCalculate" class="sm:col-span-2 bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-widest py-4.5 rounded-2xl shadow-xl shadow-cyan-400/10 hover:shadow-cyan-400/20 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 select-none cursor-pointer transform">
+                        Calculate Position Average
+                    </button>
+                    <button type="button" id="btnClear" class="bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-slate-300 font-black text-xs uppercase tracking-widest py-4.5 rounded-2xl hover:-translate-y-1 active:translate-y-0 transition-all duration-300 select-none cursor-pointer transform shadow-md hover:text-white">
+                        Clear Fields
+                    </button>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                <button type="button" id="btnCalculate" class="sm:col-span-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 hover:from-cyan-400 hover:via-teal-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-xl shadow-xl shadow-teal-500/10 hover:shadow-teal-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
-                    Calculate Average
-                </button>
-                <button type="button" id="btnClear" class="bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
-                    Clear Fields
-                </button>
-            </div>
-
-            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800 shadow-inner">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
-                    <div class="space-y-1">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Units</span>
+                <!-- Metrics Display Panel Footer Inside Box -->
+                <div class="p-5 bg-[#030712]/80 rounded-2xl border border-slate-800/60 shadow-inner grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0">
+                    <div class="text-center md:text-left space-y-1 md:pl-4">
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Total Shares Pool</span>
                         <div class="text-2xl font-black text-white" id="totalQtyDisplay">0</div>
                     </div>
-                    <div class="space-y-1 border-y md:border-y-0 md:border-x border-slate-800/80 py-4 md:py-0 md:px-6">
-                        <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest block">Average Price</span>
+                    <div class="text-center md:text-left space-y-1 md:border-x border-slate-800/60 py-4 md:py-0 md:px-8">
+                        <span class="text-[9px] font-black text-cyan-400 uppercase tracking-widest block">Position Cost Basis</span>
                         <div class="text-2xl font-black text-cyan-400" id="avgPriceDisplay">₹0.00</div>
                     </div>
-                    <div class="space-y-1 md:pl-6">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Outlay</span>
-                        <div class="text-2xl font-black text-white" id="totalCostDisplay">₹0.00</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script type="text/javascript">
-        function runStockMath() {
-            var q1 = parseFloat(document.getElementById('qty1').value) || 0;
-            var p1 = parseFloat(document.getElementById('price1').value) || 0;
-            var q2 = parseFloat(document.getElementById('qty2').value) || 0;
-            var p2 = parseFloat(document.getElementById('price2').value) || 0;
-            var totalUnits = q1 + q2;
-            var totalOutlay = (q1 * p1) + (q2 * p2);
-            var averagePrice = totalUnits > 0 ? totalOutlay / totalUnits : 0;
-
-            document.getElementById('totalQtyDisplay').innerText = totalUnits;
-            document.getElementById('avgPriceDisplay').innerText = "₹" + averagePrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            document.getElementById('totalCostDisplay').innerText = "₹" + totalOutlay.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        function resetStockForm() {
-            document.getElementById('qty1').value = '';
-            document.getElementById('price1').value = '';
-            document.getElementById('qty2').value = '';
-            document.getElementById('price2').value = '';
-            document.getElementById('totalQtyDisplay').innerText = '0';
-            document.getElementById('avgPriceDisplay').innerText = '₹0.00';
-            document.getElementById('totalCostDisplay').innerText = '₹0.00';
-        }
-
-        document.getElementById('btnCalculate').onclick = runStockMath;
-        document.getElementById('btnClear').onclick = resetStockForm;
-    </script>
-</body>
-</html>
+                    <div class="text-center md:text-left space-y-1 md:pl-8">
+                        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Gross Total Outlay</span>
