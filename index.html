@@ -52,10 +52,19 @@
     border-bottom: 1px solid var(--line);
   }
   .top-inner {
-    max-width: 640px; margin: 0 auto; padding: 14px 20px 0;
+    max-width: 640px; margin: 0 auto; padding: 14px 20px;
     display: flex; align-items: center; justify-content: space-between;
   }
-  .brand { display: flex; align-items: center; gap: 10px; }
+  .top-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .menu-btn {
+    width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--panel-2); display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 3px; cursor: pointer; flex-shrink: 0; padding: 0;
+  }
+  .menu-btn span { display: block; width: 15px; height: 2px; background: var(--text-dim); border-radius: 2px; }
+  .menu-btn:hover span { background: var(--mint-dim); }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .brand-mark {
     width: 30px; height: 30px; border-radius: 8px;
     background: linear-gradient(160deg, var(--mint), var(--mint-dim));
@@ -70,21 +79,57 @@
     background: var(--panel-2); color: var(--text-dim); display: flex; align-items: center; justify-content: center;
     cursor: pointer; font-size: 15px; flex-shrink: 0;
   }
-  .subnav {
-    max-width: 640px; margin: 0 auto; padding: 12px 20px 12px;
-    display: flex; gap: 8px; overflow-x: auto;
+  .drawer-overlay {
+    position: fixed; inset: 0; background: rgba(5,7,12,0.5); z-index: 40;
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
   }
-  .subnav::-webkit-scrollbar { display: none; }
-  .navbtn {
-    flex-shrink: 0; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--line);
-    background: var(--panel-2); color: var(--text-dim); font-size: 12.5px; font-weight: 600;
-    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--font-body); white-space: nowrap;
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; bottom: 0; left: 0; width: 280px; max-width: 84vw;
+    background: var(--panel); z-index: 50; transform: translateX(-100%);
+    transition: transform .28s ease; box-shadow: 8px 0 30px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  .navbtn.active { background: var(--mint); color: #04140d; border-color: transparent; }
-  .navbtn:hover:not(.active) { border-color: var(--line-strong); color: var(--text); }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 18px 16px; border-bottom: 1px solid var(--line);
+  }
+  .drawer-close {
+    width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--panel-2); color: var(--text-dim); cursor: pointer; flex-shrink: 0; font-size: 13px;
+  }
+  .drawer-links { padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+  .drawer-link {
+    display: flex; align-items: center; gap: 12px; text-align: left; width: 100%;
+    padding: 12px 12px; border-radius: 11px; border: none; background: transparent;
+    color: var(--text-dim); font-size: 13.5px; font-weight: 600; font-family: var(--font-body);
+    cursor: pointer;
+  }
+  .drawer-link .dl-icon {
+    width: 26px; height: 26px; border-radius: 8px; background: var(--panel-2);
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+    color: var(--text-dim); flex-shrink: 0;
+  }
+  .drawer-link:hover { background: var(--panel-2); color: var(--text); }
+  .drawer-link.active { color: var(--mint-dim); background: color-mix(in srgb, var(--mint) 12%, transparent); }
+  .drawer-link.active .dl-icon { background: var(--mint); color: #04140d; }
 
-  section { scroll-margin-top: 118px; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .mini-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mini-table th {
+    text-align: right; font-family: var(--font-mono); font-weight: 600; color: var(--text-faint);
+    font-size: 10.5px; padding: 6px 8px; border-bottom: 1px solid var(--line);
+  }
+  .mini-table th:first-child, .mini-table td:first-child { text-align: left; }
+  .mini-table td {
+    text-align: right; font-family: var(--font-mono); padding: 6px 8px; border-bottom: 1px solid var(--line);
+    color: var(--text-dim);
+  }
 
   .hero { padding: 36px 0 24px; text-align: center; }
   .hero h1 {
@@ -228,6 +273,10 @@
   .item-body { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin: 0 0 10px; white-space: pre-wrap; }
   .item-body.clamped { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .item-foot { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--text-faint); }
+  .linklike {
+    color: var(--mint-dim); text-decoration: none; font-weight: 600; background: none; border: none;
+    cursor: pointer; font-size: 11.5px; font-family: var(--font-body); padding: 0; flex-shrink: 0;
+  }
   .item-foot a, .item-foot button.linklike {
     color: var(--mint-dim); text-decoration: none; font-weight: 600; background: none; border: none;
     cursor: pointer; font-size: 11.5px; font-family: var(--font-body); padding: 0;
@@ -250,11 +299,51 @@
     border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; font-size: 13px;
     background: var(--bg); color: var(--text-dim);
   }
+  .back-btn {
+    background: var(--panel-2); border: 1px solid var(--line); color: var(--text-dim);
+    border-radius: 10px; padding: 9px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .back-btn:hover { color: var(--text); border-color: var(--line-strong); }
+  .report-line {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    width: 100%; text-align: left; background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 13px; padding: 13px 14px; margin-bottom: 10px; cursor: pointer; font-family: var(--font-body);
+  }
+  .report-line:hover { border-color: var(--mint-dim); }
+  .report-line-main { min-width: 0; }
+  .report-line-title { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; margin: 0 0 2px; color: var(--text); }
+  .report-line-meta { font-size: 11px; color: var(--text-faint); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .report-line-arrow { color: var(--text-faint); font-size: 15px; flex-shrink: 0; }
+  .report-frame-wrap {
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-top: 14px;
+    height: 72vh; background: var(--panel-2);
+  }
+  .report-frame-wrap iframe { width: 100%; height: 100%; border: none; }
 </style>
 </head>
 <body>
 <header class="top">
   <div class="top-inner">
+    <div class="top-left">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <div class="brand-name" id="pageTitleLabel">Stock average calculator</div>
+          <div class="brand-sub">Darshan · CFA Level 2 Candidate</div>
+        </div>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<nav class="drawer" id="drawer">
+  <div class="drawer-head">
     <div class="brand">
       <div class="brand-mark">A</div>
       <div>
@@ -262,18 +351,27 @@
         <div class="brand-sub">Darshan · CFA Level 2 Candidate</div>
       </div>
     </div>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
   </div>
-  <nav class="subnav">
-    <a class="navbtn active" href="#calculator" data-nav="calculator">Calculator</a>
-    <a class="navbtn" href="#reports" data-nav="reports">Equity reports</a>
-    <a class="navbtn" href="#knowledge" data-nav="knowledge">Knowledge hub</a>
-  </nav>
-</header>
+  <div class="drawer-links">
+    <button class="drawer-link active" data-page="calculator" type="button">
+      <span class="dl-icon">＋</span>Stock average calculator
+    </button>
+    <button class="drawer-link" data-page="ddm" type="button">
+      <span class="dl-icon">Σ</span>Dividend discount model
+    </button>
+    <button class="drawer-link" data-page="reports" type="button">
+      <span class="dl-icon">▤</span>Equity research reports
+    </button>
+    <button class="drawer-link" data-page="knowledge" type="button">
+      <span class="dl-icon">◈</span>Financial knowledge hub
+    </button>
+  </div>
+</nav>
 
 <div class="wrap">
 
-  <section id="calculator">
+  <section id="calculator" class="page active">
     <div class="hero">
       <h1>Stock average calculator</h1>
       <p>Work out your <strong>average cost per share</strong> across multiple buys, and see how it stacks up against the market.</p>
@@ -332,36 +430,109 @@
     <p class="note">Buying more shares at a lower price than your current average will pull the average down — this tool shows exactly where the new average lands.</p>
   </section>
 
-  <section id="reports">
+  <section id="ddm" class="page">
     <div class="section-head">
-      <h2>Equity research reports</h2>
-      <p>Upload PDF reports and pull them up whenever you need them.</p>
+      <h2>Dividend discount model</h2>
+      <p>Two-stage DDM — estimate intrinsic value from expected dividends.</p>
     </div>
 
     <div class="card">
-      <div id="reportsList"><div class="empty-state">Loading reports…</div></div>
-      <button class="toggle-form-btn" id="toggleReportForm" type="button">+ Upload a report</button>
+      <div class="card-title">Assumptions</div>
+      <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+        <div class="field"><label>Current annual dividend (D0)</label><input type="number" step="any" id="ddmD0" placeholder="e.g. 6.60"></div>
+        <div class="field"><label>Required return / cost of equity (%)</label><input type="number" step="any" id="ddmR" placeholder="e.g. 12"></div>
+      </div>
+      <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+        <div class="field"><label>High-growth rate g1 (%)</label><input type="number" step="any" id="ddmG1" placeholder="e.g. 15"></div>
+        <div class="field"><label>High-growth period (years)</label><input type="number" step="1" min="1" max="10" id="ddmN1" placeholder="e.g. 5"></div>
+      </div>
+      <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:4px;">
+        <div class="field"><label>Stable / terminal growth g2 (%)</label><input type="number" step="any" id="ddmG2" placeholder="e.g. 5"></div>
+        <div class="field"><label>Current market price</label><input type="number" step="any" id="ddmPrice" placeholder="Optional"></div>
+      </div>
+    </div>
 
-      <div id="reportForm" class="hidden" style="margin-top:14px;">
-        <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
-          <div class="field"><label>Company / title</label><input type="text" id="repTitle" placeholder="e.g. Reliance Industries"></div>
-          <div class="field"><label>Ticker</label><input type="text" id="repTicker" placeholder="e.g. RELIANCE"></div>
+    <div class="actions">
+      <button class="btn btn-ghost" id="ddmClear" type="button">Clear all</button>
+      <button class="btn btn-primary" id="ddmCalculate" type="button">Calculate intrinsic value</button>
+    </div>
+
+    <div class="inline-error hidden" id="ddmError"></div>
+
+    <div class="card" id="ddmResultsCard">
+      <div class="results">
+        <div class="stat">
+          <div class="lbl">Intrinsic value / share</div>
+          <div class="val mint" id="ddmIntrinsic">–</div>
         </div>
-        <div class="field" style="margin-bottom:10px;">
-          <label>Summary</label>
-          <textarea id="repSummary" placeholder="One or two lines on the thesis or key takeaway"></textarea>
+        <div class="stat">
+          <div class="lbl">Stage-1 dividends (PV)</div>
+          <div class="val" id="ddmStage1Pv">–</div>
         </div>
-        <div class="field" style="margin-bottom:6px;">
-          <label>PDF file</label>
-          <input type="file" id="repFile" accept="application/pdf" class="field-file">
+        <div class="stat">
+          <div class="lbl">Terminal value (PV)</div>
+          <div class="val" id="ddmTerminalPv">–</div>
         </div>
-        <div class="inline-error hidden" id="repError"></div>
-        <button class="btn btn-primary btn-full" id="repSubmit" type="button">Save report</button>
+      </div>
+
+      <div class="pnl-row hidden" id="ddmVerdictRow">
+        <span class="pl-label">Versus current market price</span>
+        <span class="pl-val" id="ddmVerdictVal">–</span>
+      </div>
+
+      <div id="ddmYearTable" style="margin-top:16px;"></div>
+    </div>
+
+    <p class="note">The two-stage model assumes dividends grow at g1 for n1 years, then settle into a stable g2 forever. It breaks down if the required return isn't comfortably above g2.</p>
+  </section>
+
+  <section id="reports" class="page">
+    <div class="section-head">
+      <h2>Equity research reports</h2>
+      <p>Tap a report to read it right here — nothing downloads or opens in a new tab.</p>
+    </div>
+
+    <div id="reportsListView">
+      <div class="card">
+        <div id="reportsList"><div class="empty-state">Loading reports…</div></div>
+        <button class="toggle-form-btn" id="toggleReportForm" type="button">+ Upload a report</button>
+
+        <div id="reportForm" class="hidden" style="margin-top:14px;">
+          <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+            <div class="field"><label>Company / title</label><input type="text" id="repTitle" placeholder="e.g. Reliance Industries"></div>
+            <div class="field"><label>Ticker</label><input type="text" id="repTicker" placeholder="e.g. RELIANCE"></div>
+          </div>
+          <div class="field" style="margin-bottom:10px;">
+            <label>Summary</label>
+            <textarea id="repSummary" placeholder="One or two lines on the thesis or key takeaway"></textarea>
+          </div>
+          <div class="field" style="margin-bottom:6px;">
+            <label>PDF file</label>
+            <input type="file" id="repFile" accept="application/pdf" class="field-file">
+          </div>
+          <div class="inline-error hidden" id="repError"></div>
+          <button class="btn btn-primary btn-full" id="repSubmit" type="button">Save report</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="reportDetailView" class="hidden">
+      <button class="back-btn" id="reportBackBtn" type="button">← Back to reports</button>
+      <div class="card" style="margin-top:10px;">
+        <div class="item-top" style="margin-bottom:4px;">
+          <p class="item-title" id="reportDetailTitle" style="font-size:16.5px;">–</p>
+          <span class="badge badge-mint hidden" id="reportDetailTicker"></span>
+        </div>
+        <p class="item-body" id="reportDetailSummary" style="margin-bottom:4px;"></p>
+        <span class="empty-state" style="padding:6px 0; display:block; text-align:left;" id="reportDetailDate"></span>
+      </div>
+      <div class="report-frame-wrap">
+        <iframe id="reportFrame" title="Report viewer" src=""></iframe>
       </div>
     </div>
   </section>
 
-  <section id="knowledge">
+  <section id="knowledge" class="page">
     <div class="section-head">
       <h2>Financial knowledge hub</h2>
       <p>Notes, frameworks and concepts worth remembering.</p>
@@ -560,27 +731,40 @@
   addLot(15, 132.75);
   runCostAveraging();
 
-  var navLinks = document.querySelectorAll('.navbtn');
-  var sections = ['calculator', 'reports', 'knowledge'].map(function(id) { return document.getElementById(id); });
-  navLinks.forEach(function(link) {
+  var drawer = document.getElementById('drawer');
+  var drawerOverlay = document.getElementById('drawerOverlay');
+  var menuBtn = document.getElementById('menuBtn');
+  var drawerClose = document.getElementById('drawerClose');
+  var drawerLinks = document.querySelectorAll('.drawer-link');
+  var pageTitleLabel = document.getElementById('pageTitleLabel');
+  var pages = document.querySelectorAll('.page');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+  }
+  menuBtn.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerOverlay.addEventListener('click', closeDrawer);
+
+  function showPage(id) {
+    pages.forEach(function(p) { p.classList.toggle('active', p.id === id); });
+    drawerLinks.forEach(function(l) {
+      l.classList.toggle('active', l.getAttribute('data-page') === id);
+      if (l.getAttribute('data-page') === id) pageTitleLabel.textContent = l.textContent.trim();
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  }
+  drawerLinks.forEach(function(link) {
     link.addEventListener('click', function() {
-      navLinks.forEach(function(l) { l.classList.remove('active'); });
-      link.classList.add('active');
+      showPage(link.getAttribute('data-page'));
+      closeDrawer();
     });
   });
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          var id = entry.target.id;
-          navLinks.forEach(function(l) {
-            l.classList.toggle('active', l.getAttribute('data-nav') === id);
-          });
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px' });
-    sections.forEach(function(s) { if (s) observer.observe(s); });
-  }
 
   function escapeHtml(s) {
     var d = document.createElement('div');
@@ -645,22 +829,48 @@
   toggleForm('toggleReportForm', 'reportForm');
   toggleForm('toggleKnowledgeForm', 'knowledgeForm');
 
+  var reportsCache = {};
+
   function reportCardHtml(d, id, editable) {
-    return '<div class="item-card">' +
-      '<div class="item-top">' +
-        '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
-        (d.ticker ? '<span class="badge badge-mint">' + escapeHtml(d.ticker) + '</span>' : '') +
-      '</div>' +
-      (d.summary ? '<p class="item-body">' + escapeHtml(d.summary) + '</p>' : '') +
-      '<div class="item-foot">' +
-        '<span>' + formatDate(d.createdAt || d.date) + '</span>' +
-        '<div class="actions-mini">' +
-          (d.url ? '<a href="' + d.url + '" target="_blank" rel="noopener">Open PDF</a>' : '') +
-          (editable ? '<button type="button" class="linklike del-btn" data-del-report="' + id + '" data-asset="' + (d.assetId || '') + '">Delete</button>' : '') +
+    reportsCache[id] = d;
+    return '<div class="report-line" data-open-report="' + id + '">' +
+      '<div class="report-line-main">' +
+        '<p class="report-line-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
+        '<div class="report-line-meta">' +
+          (d.ticker ? '<span class="badge badge-mint">' + escapeHtml(d.ticker) + '</span>' : '') +
+          '<span>' + formatDate(d.createdAt || d.date) + '</span>' +
         '</div>' +
       '</div>' +
+      (editable ? '<button type="button" class="linklike del-btn" data-del-report="' + id + '" data-asset="' + (d.assetId || '') + '">Delete</button>' : '') +
+      '<span class="report-line-arrow">›</span>' +
     '</div>';
   }
+
+  function openReportDetail(id) {
+    var d = reportsCache[id];
+    if (!d) return;
+    document.getElementById('reportDetailTitle').textContent = d.title || 'Untitled';
+    var tickerEl = document.getElementById('reportDetailTicker');
+    if (d.ticker) {
+      tickerEl.textContent = d.ticker;
+      tickerEl.classList.remove('hidden');
+    } else {
+      tickerEl.classList.add('hidden');
+    }
+    document.getElementById('reportDetailSummary').textContent = d.summary || '';
+    document.getElementById('reportDetailDate').textContent = formatDate(d.createdAt || d.date);
+    document.getElementById('reportFrame').src = d.url || '';
+    document.getElementById('reportsListView').classList.add('hidden');
+    document.getElementById('reportDetailView').classList.remove('hidden');
+  }
+
+  function closeReportDetail() {
+    document.getElementById('reportFrame').src = '';
+    document.getElementById('reportDetailView').classList.add('hidden');
+    document.getElementById('reportsListView').classList.remove('hidden');
+  }
+
+  document.getElementById('reportBackBtn').addEventListener('click', closeReportDetail);
 
   function knowledgeCardHtml(d, id, editable) {
     return '<div class="item-card">' +
@@ -682,6 +892,7 @@
   function subscribeReports() {
     dbNs.collection('reports').orderBy('createdAt', 'desc').limit(50).onSnapshot(function(snap) {
       var list = document.getElementById('reportsList');
+      reportsCache = {};
       if (!snap.docs || snap.docs.length === 0) {
         list.innerHTML = '<div class="empty-state">No reports uploaded yet.</div>';
         return;
@@ -718,6 +929,7 @@
 
   function loadStaticReports() {
     var list = document.getElementById('reportsList');
+    reportsCache = {};
     loadStaticJson('reports.json').then(function(items) {
       if (!items || items.length === 0) {
         list.innerHTML = '<div class="empty-state">No reports yet. Add one to reports.json and push to update this page.</div>';
@@ -745,19 +957,19 @@
   }
 
   document.getElementById('reportsList').addEventListener('click', function(e) {
-    var expandBtn = e.target.closest('[data-expand]');
-    if (expandBtn) {
-      var body = expandBtn.closest('.item-card').querySelector('.item-body');
-      body.classList.toggle('clamped');
-      expandBtn.textContent = body.classList.contains('clamped') ? 'Read more' : 'Show less';
+    var delBtn = e.target.closest('[data-del-report]');
+    if (delBtn) {
+      if (dbNs) {
+        var id = delBtn.getAttribute('data-del-report');
+        var assetId = delBtn.getAttribute('data-asset');
+        dbNs.collection('reports').doc(id).delete().catch(function() {});
+        if (assetId && assetsNs) assetsNs.delete(assetId).catch(function() {});
+      }
       return;
     }
-    var delBtn = e.target.closest('[data-del-report]');
-    if (delBtn && dbNs) {
-      var id = delBtn.getAttribute('data-del-report');
-      var assetId = delBtn.getAttribute('data-asset');
-      dbNs.collection('reports').doc(id).delete().catch(function() {});
-      if (assetId && assetsNs) assetsNs.delete(assetId).catch(function() {});
+    var openLine = e.target.closest('[data-open-report]');
+    if (openLine) {
+      openReportDetail(openLine.getAttribute('data-open-report'));
     }
   });
 
@@ -881,6 +1093,91 @@
       knSubmit.textContent = 'Save note';
     });
   });
+
+  function ddmClear() {
+    ['ddmD0', 'ddmR', 'ddmG1', 'ddmN1', 'ddmG2', 'ddmPrice'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('ddmError').classList.add('hidden');
+    document.getElementById('ddmIntrinsic').textContent = '–';
+    document.getElementById('ddmStage1Pv').textContent = '–';
+    document.getElementById('ddmTerminalPv').textContent = '–';
+    document.getElementById('ddmVerdictRow').classList.add('hidden');
+    document.getElementById('ddmYearTable').innerHTML = '';
+  }
+
+  function runDdm() {
+    var errEl = document.getElementById('ddmError');
+    errEl.classList.add('hidden');
+
+    var d0 = parseFloat(document.getElementById('ddmD0').value);
+    var r = parseFloat(document.getElementById('ddmR').value) / 100;
+    var g1 = parseFloat(document.getElementById('ddmG1').value) / 100;
+    var n1 = parseInt(document.getElementById('ddmN1').value, 10);
+    var g2 = parseFloat(document.getElementById('ddmG2').value) / 100;
+    var price = parseFloat(document.getElementById('ddmPrice').value) || 0;
+
+    if (!(d0 > 0) || isNaN(r) || isNaN(g1) || !(n1 > 0) || isNaN(g2)) {
+      errEl.textContent = 'Fill in D0, required return, g1, the growth period and g2 first';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (n1 > 10) {
+      errEl.textContent = 'Keep the high-growth period to 10 years or fewer';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (r <= g2) {
+      errEl.textContent = 'Required return must be greater than the terminal growth rate (g2)';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    var rows = [];
+    var stage1Pv = 0;
+    var dPrev = d0;
+    for (var t = 1; t <= n1; t++) {
+      var dt = dPrev * (1 + g1);
+      var pv = dt / Math.pow(1 + r, t);
+      stage1Pv += pv;
+      rows.push({ year: t, div: dt, pv: pv });
+      dPrev = dt;
+    }
+
+    var dTerminalNext = dPrev * (1 + g2);
+    var terminalValue = dTerminalNext / (r - g2);
+    var terminalPv = terminalValue / Math.pow(1 + r, n1);
+    var intrinsic = stage1Pv + terminalPv;
+
+    document.getElementById('ddmIntrinsic').textContent = fmt(intrinsic);
+    document.getElementById('ddmStage1Pv').textContent = fmt(stage1Pv);
+    document.getElementById('ddmTerminalPv').textContent = fmt(terminalPv);
+
+    var verdictRow = document.getElementById('ddmVerdictRow');
+    if (price > 0) {
+      var diff = intrinsic - price;
+      var diffPct = (diff / price) * 100;
+      verdictRow.classList.remove('hidden');
+      var verdictVal = document.getElementById('ddmVerdictVal');
+      var label = diff >= 0 ? 'Undervalued by ' : 'Overvalued by ';
+      verdictVal.textContent = label + fmt(Math.abs(diff)) + '  (' + (diffPct >= 0 ? '+' : '') + diffPct.toFixed(1) + '%)';
+      verdictVal.className = 'pl-val ' + (diff >= 0 ? 'up' : 'down');
+    } else {
+      verdictRow.classList.add('hidden');
+    }
+
+    var tableHtml = '<table class="mini-table"><thead><tr><th>Year</th><th>Dividend</th><th>PV @ ' +
+      (r * 100).toFixed(1) + '%</th></tr></thead><tbody>';
+    rows.forEach(function(row) {
+      tableHtml += '<tr><td>' + row.year + '</td><td>' + fmt(row.div) + '</td><td>' + fmt(row.pv) + '</td></tr>';
+    });
+    tableHtml += '<tr><td>Terminal (yr ' + n1 + ')</td><td>' + fmt(dTerminalNext) + '</td><td>' + fmt(terminalPv) + '</td></tr>';
+    tableHtml += '</tbody></table>';
+    document.getElementById('ddmYearTable').innerHTML = tableHtml;
+  }
+
+  document.getElementById('ddmCalculate').addEventListener('click', runDdm);
+  document.getElementById('ddmClear').addEventListener('click', ddmClear);
 
   initBackend();
 })();
