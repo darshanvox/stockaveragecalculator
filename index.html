@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpha Insights | Darshan's Financial Intelligence Dashboard</title>
-    <!-- Tailwind CSS Engine -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://tailwindcss.com"></script>
     <style>
         @keyframes pulseGlow {
             0%, 100% { opacity: 0.3; transform: scale(1); }
@@ -15,129 +14,74 @@
     </style>
 </head>
 <body class="bg-[#030712] text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-slate-900 min-h-screen relative overflow-x-hidden">
-
-    <!-- Ambient Glow Layers -->
-    <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-gradient-to-br from-emerald-600/10 to-transparent rounded-full blur-[140px] glow-sphere pointer-events-none"></div>
-    <div class="absolute top-[20%] right-[-10%] w-[45vw] h-[45vw] bg-gradient-to-br from-teal-500/10 to-transparent rounded-full blur-[100px] glow-sphere pointer-events-none" style="animation-delay: 3s;"></div>
-
-    <!-- Navigation Bar -->
     <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#030712]/75 border-b border-slate-900">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-sm font-black tracking-widest bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent transition-all duration-300 hover:brightness-125">
-                📊 ALPHA INSIGHTS
-            </a>
-            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-3 py-1 rounded-full uppercase tracking-wider">
-                Live Portal
-            </span>
+            <a href="index.html" class="text-sm font-black tracking-widest bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">📊 ALPHA INSIGHTS</a>
+            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-3 py-1 rounded-full uppercase tracking-wider">Live Portal</span>
         </div>
     </nav>
-
-    <!-- Header Section -->
     <header class="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center relative z-10">
-        <div class="inline-flex items-center gap-2.5 bg-slate-900/80 border border-slate-800 backdrop-blur-md rounded-full px-5 py-2 text-xs font-semibold text-slate-300 mb-6 shadow-2xl">
-            <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span>Financial Intelligence Dashboard Active</span>
-        </div>
         <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">ALPHA INSIGHTS</h1>
-        <p class="text-xs md:text-sm font-medium text-slate-400 tracking-wide">
-            Hi, I am <span class="text-slate-200 font-semibold">Darshan</span>, a <span class="text-emerald-400 font-bold">CFA Level 2 Candidate</span>
-        </p>
+        <p class="text-xs md:text-sm font-medium text-slate-400">Hi, I am <span class="text-slate-200 font-semibold">Darshan</span>, a <span class="text-emerald-400 font-bold">CFA Level 2 Candidate</span></p>
     </header>
-
-    <!-- Main Content Area -->
     <main class="max-w-4xl mx-auto px-6 pb-24 relative z-10 space-y-16">
-        <section class="bg-slate-900/30 backdrop-blur-xl rounded-3xl border border-slate-800/60 p-6 md:p-8 shadow-2xl shadow-black/70">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-2 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-slate-950 text-sm font-bold shadow-md shadow-emerald-500/10">⚙️</div>
-                <div>
-                    <h2 class="text-lg font-bold text-white tracking-wide">Stock market average calculator</h2>
-                    <p class="text-xs text-slate-400">Enter purchase tranches to evaluate your custom blended positions</p>
-                </div>
-            </div>
-
-            <!-- Input Cards Matrix -->
+        <section class="bg-slate-900/30 backdrop-blur-xl rounded-3xl border border-slate-800/60 p-6 md:p-8 shadow-2xl">
+            <h2 class="text-lg font-bold text-white mb-6">Stock market average calculator</h2>
             <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <!-- First Purchase Card -->
-                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/50 shadow-inner">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
-                    </h3>
+                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/50">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">First Purchase</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1.5">Units</label>
-                            <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-mono font-semibold focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1.5">Price per share</label>
-                            <input type="number" id="price1" step="any" placeholder="Price" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
+                        <div><input type="number" id="qty1" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-mono"></div>
+                        <div><input type="number" id="price1" step="any" placeholder="Price" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-[#10b981] font-mono"></div>
                     </div>
                 </div>
-
-                <!-- Second Purchase Card -->
-                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/50 shadow-inner">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
-                    </h3>
+                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800/50">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">Second Purchase</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1.5">Units</label>
-                            <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-mono font-semibold focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1.5">Price per share</label>
-                            <input type="number" id="price2" step="any" placeholder="Price" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
-                        </div>
+                        <div><input type="number" id="qty2" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-mono"></div>
+                        <div><input type="number" id="price2" step="any" placeholder="Price" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3 py-2 text-sm text-[#10b981] font-mono"></div>
                     </div>
                 </div>
             </div>
-
-            <!-- Dynamic Buttons Matrix -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-                <button type="button" id="btnCalculate" class="sm:col-span-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:via-teal-400 hover:to-cyan-400 text-slate-950 font-black text-xs uppercase tracking-widest px-6 py-4 rounded-xl shadow-xl shadow-emerald-500/10 hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
-                    Calculate Average
-                </button>
-                <button type="button" id="btnClear" class="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-4 rounded-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer select-none">
-                    Clear Fields
-                </button>
+                <button type="button" id="btnCalculate" class="sm:col-span-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-xs uppercase px-6 py-4 rounded-xl cursor-pointer">Calculate Average</button>
+                <button type="button" id="btnClear" class="bg-slate-800/50 border border-slate-700/50 text-slate-300 font-bold text-xs uppercase px-6 py-4 rounded-xl cursor-pointer">Clear Fields</button>
             </div>
-
-            <!-- Dynamic Output Results Window -->
-            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800/80 shadow-inner">
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800/80">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
-                    <div class="space-y-1">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Units</span>
-                        <div class="text-2xl font-black text-white font-mono" id="totalQtyDisplay">0</div>
-                    </div>
-                    <div class="space-y-1 border-y md:border-y-0 md:border-x border-slate-800/80 py-4 md:py-0 md:px-6">
-                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Average Price</span>
-                        <div class="text-2xl font-black text-[#10b981] font-mono drop-shadow-[0_2px_8px_rgba(16,185,129,0.1)]" id="avgPriceDisplay">$0.00</div>
-                    </div>
-                    <div class="space-y-1 md:pl-6">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Outlay</span>
-                        <div class="text-2xl font-black text-[#10b981] font-mono drop-shadow-[0_4px_12px_rgba(16,185,129,0.15)]" id="totalCostDisplay">$0.00</div>
-                    </div>
+                    <div><span class="text-[10px] font-bold text-slate-500 uppercase">Total Units</span><div class="text-2xl font-black text-white font-mono" id="totalQtyDisplay">0</div></div>
+                    <div><span class="text-[10px] font-bold text-emerald-400 uppercase">Average Price</span><div class="text-2xl font-black text-[#10b981] font-mono" id="avgPriceDisplay">0.00</div></div>
+                    <div><span class="text-[10px] font-bold text-slate-500 uppercase">Total Outlay</span><div class="text-2xl font-black text-[#10b981] font-mono" id="totalCostDisplay">0.00</div></div>
                 </div>
             </div>
         </section>
     </main>
-
-    <!-- Calculation Engine Script -->
     <script>
         const btnCalculate = document.getElementById('btnCalculate');
         const btnClear = document.getElementById('btnClear');
-
         function runCostAveraging() {
             const q1 = Math.max(0, parseFloat(document.getElementById('qty1').value) || 0);
             const p1 = Math.max(0, parseFloat(document.getElementById('price1').value) || 0);
             const q2 = Math.max(0, parseFloat(document.getElementById('qty2').value) || 0);
             const p2 = Math.max(0, parseFloat(document.getElementById('price2').value) || 0);
-
             const totalQty = q1 + q2;
             const totalOutlay = (q1 * p1) + (q2 * p2);
             const avgPrice = totalQty > 0 ? (totalOutlay / totalQty) : 0;
-
             document.getElementById('totalQtyDisplay').textContent = totalQty.toLocaleString();
+            document.getElementById('avgPriceDisplay').textContent = avgPrice.toFixed(2);
+            document.getElementById('totalCostDisplay').textContent = totalOutlay.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+        function resetCalculator() {
+            document.getElementById('qty1').value = '';
+            document.getElementById('price1').value = '';
+            document.getElementById('qty2').value = '';
+            document.getElementById('price2').value = '';
+            document.getElementById('totalQtyDisplay').textContent = '0';
+            document.getElementById('avgPriceDisplay').textContent = '0.00';
+            document.getElementById('totalCostDisplay').textContent = '0.00';
+        }
+        btnCalculate.addEventListener('click', runCostAveraging);
+        btnClear.addEventListener('click', resetCalculator);
+    </script>
+</body>
+</html>
