@@ -6,142 +6,136 @@
     <title>Alpha Insights | Darshan's Financial Intelligence Dashboard</title>
     <!-- Tailwind CSS Engine -->
     <script src="https://tailwindcss.com"></script>
+    <style>
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+        }
+        .glow-sphere { animation: pulseGlow 8s infinite ease-in-out; }
+    </style>
 </head>
 <body class="bg-[#030712] text-slate-100 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-emerald-500 selection:text-slate-900">
 
-    <!-- Top Navigation Branding Bar -->
-    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#030712]/80 border-b border-slate-900/60">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+    <!-- Ambient Visual Glow Effects -->
+    <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-gradient-to-br from-emerald-600/10 to-transparent rounded-full blur-[140px] glow-sphere pointer-events-none"></div>
+    <div class="absolute top-[30%] right-[-10%] w-[45vw] h-[45vw] bg-gradient-to-br from-teal-500/10 to-transparent rounded-full blur-[100px] glow-sphere pointer-events-none" style="animation-delay: 3s;"></div>
+
+    <!-- Navigation Header Bar -->
+    <nav class="sticky top-0 z-50 backdrop-blur-xl bg-[#030712]/75 border-b border-slate-900/60">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <span class="text-xs font-black tracking-widest bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 📊 ALPHA INSIGHTS
             </span>
-            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/30 border border-emerald-900/40 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                CFA Engine v2.6
+            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                Live Portal
             </span>
         </div>
     </nav>
 
-    <!-- Custom Personalized Header -->
-    <header class="max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-10 text-center relative z-10">
+    
+    <header class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center relative z-10">
         <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">ALPHA INSIGHTS</h1>
         <p class="text-xs md:text-sm font-medium text-slate-400 tracking-wide">
             Hi, I am <span class="text-slate-200 font-semibold">Darshan</span>, a <span class="text-emerald-400 font-bold">CFA Level 2 Candidate</span>
         </p>
     </header>
 
-    <!-- Main Content Application Framework -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 pb-24 relative z-10">
-        
-        <!-- Calculator Interface Layout Frame -->
+    <!-- Main Content Container matching structural layout order -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 pb-24 relative z-10">
         <div class="bg-slate-900/20 rounded-2xl border border-slate-800/80 p-5 sm:p-6 shadow-2xl">
             
-            <!-- Section Header Banner -->
-            <div class="border-b border-slate-800/60 pb-4 mb-6 flex items-center justify-between">
-                <div>
-                    <h2 class="text-base font-bold text-white tracking-wide">Stock market average calculator</h2>
-                    <p class="text-xs text-slate-400">Compute comprehensive average positions across multiple asset buy tranches</p>
+            <h2 class="text-base font-bold text-white tracking-wide border-b border-slate-800/60 pb-3 mb-6">
+                Stock market average calculator
+            </h2>
+
+            <!-- Segment 1: Purchase Tranches inputs stack sequentially downwards -->
+            <div class="space-y-6 mb-6">
+                
+                <!-- First Purchase Row Block -->
+                <div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
+                            <input type="number" id="qty1" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
+                            <input type="number" id="price1" step="any" placeholder="Price per share" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Second Purchase Row Block -->
+                <div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
+                            <input type="number" id="qty2" placeholder="Units" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
+                            <input type="number" id="price2" step="any" placeholder="Price per share" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Side-by-Side Dual Column Matrix -->
-            <div class="grid md:grid-cols-2 gap-6 items-start">
-                
-                <!-- Left Input Fields Panel -->
-                <div class="space-y-5">
-                    
-                    <!-- First Buy Tranche Block -->
-                    <div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-4 shadow-sm">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> First Purchase
-                        </h3>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                                <input type="number" id="qty1" placeholder="Enter share units" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-emerald-500 transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                                <input type="number" id="price1" step="any" placeholder="Enter share price" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
-                            </div>
-                        </div>
-                    </div>
+            <!-- Segment 2: Control buttons position immediately below inputs -->
+            <div class="flex flex-col sm:flex-row gap-3 mb-8">
+                <button type="button" id="btnClear" class="sm:w-1/3 bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 text-slate-300 font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl transition-colors cursor-pointer select-none">
+                    Clear Fields
+                </button>
+                <button type="button" id="btnCalculate" class="sm:w-2/3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all cursor-pointer select-none">
+                    Calculate Average
+                </button>
+            </div>
 
-                    <!-- Second Buy Tranche Block -->
-                    <div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-4 shadow-sm">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Second Purchase
-                        </h3>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Units</label>
-                                <input type="number" id="qty2" placeholder="Enter share units" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-emerald-500 transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-tight mb-1">Price per share</label>
-                                <input type="number" id="price2" step="any" placeholder="Enter share price" class="w-full bg-[#030712] border border-slate-800 rounded-lg px-3 py-2 text-sm text-[#10b981] font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors">
-                            </div>
-                        </div>
+            <!-- Segment 3: Consolidated Metrics Display Window at the very bottom -->
+            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 rounded-xl border border-slate-800/80 shadow-inner">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Units</span>
+                        <div class="text-2xl font-black text-white font-mono tracking-tight" id="totalQtyDisplay">0</div>
                     </div>
-
-                    <!-- Functional Interactive Button Bar -->
-                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                        <button type="button" id="btnCalculate" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:translate-y-0 transition-all cursor-pointer select-none">
-                            Calculate Average
-                        </button>
-                        <button type="button" id="btnClear" class="bg-slate-800/40 hover:bg-slate-800 border border-slate-700/40 text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-3.5 rounded-xl transition-colors cursor-pointer select-none">
-                            Clear Fields
-                        </button>
+                    <div class="space-y-1 border-y md:border-y-0 md:border-x border-slate-800/60 py-4 md:py-0 md:px-6">                
+                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Average Price</span>
+                        <div class="text-2xl font-black text-[#10b981] font-mono tracking-tight drop-shadow-[0_2px_8px_rgba(16,185,129,0.1)]" id="avgPriceDisplay">0.00</div>
                     </div>
-
+                    <div class="space-y-1 md:pl-6">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Outlay</span>
+                        <div class="text-2xl font-black text-[#10b981] font-mono tracking-tight drop-shadow-[0_4px_12px_rgba(16,185,129,0.15)]" id="totalCostDisplay">0.00</div>
+                    </div>
                 </div>
-
-                <!-- Right Live Metrics Output Window -->
-                <div class="bg-gradient-to-b from-slate-950/60 to-slate-950/90 border border-slate-800/80 rounded-xl p-5 md:p-6 space-y-6 shadow-inner h-full md:min-h-[380px] flex flex-col justify-center">
-                    
-                    <!-- Metric Row 1: Total Units -->
-                    <div class="border-b border-slate-900 pb-4">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Total Units</span>
-                        <div class="text-3xl font-black text-white font-mono tracking-tight" id="totalQtyDisplay">0</div>
-                    </div>
-
-                    <!-- Metric Row 2: Average Blended Cost -->
-                    <div class="border-b border-slate-900 pb-4">
-                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">Average Price</span>
-                        <div class="text-3xl font-black text-[#10b981] font-mono tracking-tight drop-shadow-[0_2px_8px_rgba(16,185,129,0.1)]" id="avgPriceDisplay">0.00</div>
-                    </div>
-
-                    <!-- Metric Row 3: Cumulative Financial Outlay -->
-                    <div>
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Total Outlay</span>
-                        <div class="text-3xl font-black text-[#10b981] font-mono tracking-tight drop-shadow-[0_4px_12px_rgba(16,185,129,0.15)]" id="totalCostDisplay">0.00</div>
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
-
     </main>
 
-    <!-- Calculation Engine Script Core Logic -->
+    <!-- Verified Mathematical Engine Logic Scripts -->
     <script>
         const btnCalculate = document.getElementById('btnCalculate');
         const btnClear = document.getElementById('btnClear');
 
         function runCostAveraging() {
-            // Retrieve mathematical values safely from inputs
+            // Read value configurations from user input fields safely
             const q1 = Math.max(0, parseFloat(document.getElementById('qty1').value) || 0);
             const p1 = Math.max(0, parseFloat(document.getElementById('price1').value) || 0);
             const q2 = Math.max(0, parseFloat(document.getElementById('qty2').value) || 0);
             const p2 = Math.max(0, parseFloat(document.getElementById('price2').value) || 0);
 
-            // Execute weighted allocation calculations
+            // Compute math metrics
             const totalQty = q1 + q2;
             const totalOutlay = (q1 * p1) + (q2 * p2);
             const avgPrice = totalQty > 0 ? (totalOutlay / totalQty) : 0;
 
-            // Update user view elements with formatted parameters
+            // Reflect state adjustments onto output displays instantly
             document.getElementById('totalQtyDisplay').textContent = totalQty.toLocaleString();
             document.getElementById('avgPriceDisplay').textContent = avgPrice.toFixed(2);
             document.getElementById('totalCostDisplay').textContent = totalOutlay.toLocaleString(undefined, {
@@ -151,10 +145,10 @@
         }
 
         function resetCalculator() {
-            // Flush strings cleanly from forms
+            // Wipe standard user input fields
             document.getElementById('qty1').value = '';
             document.getElementById('price1').value = '';
             document.getElementById('qty2').value = '';
             document.getElementById('price2').value = '';
             
-            // Revert state markers back to zero baseline
+            // Revert state values back to structural default zeros
