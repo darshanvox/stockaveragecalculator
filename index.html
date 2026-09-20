@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alpha Insights — Stock Average Calculator</title>
+<title>Alpha Insights — Financial Intelligence Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
     --mint-dim: #0c7a53;
     --amber: #b5720f;
     --red: #c8433a;
+    --blue: #2563a8;
     --font-display: 'Space Grotesk', system-ui, sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -29,10 +30,10 @@
     --bg: #05070c; --panel: #0c1018; --panel-2: #10151f;
     --line: rgba(148,163,184,0.14); --line-strong: rgba(148,163,184,0.28);
     --text: #e7ebf3; --text-dim: #8992a3; --text-faint: #5b6274;
-    --mint: #35e0a1; --mint-dim: #1c8f6a; --amber: #f0a94e; --red: #e2685c;
+    --mint: #35e0a1; --mint-dim: #1c8f6a; --amber: #f0a94e; --red: #e2685c; --blue: #6db4ff;
   }
   * { box-sizing: border-box; }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html { scroll-padding-top: 118px; scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
@@ -43,15 +44,15 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 620px; margin: 0 auto; padding: 0 20px 64px; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 20px 80px; }
   header.top {
     position: sticky; top: 0; top: env(safe-area-inset-top, 0px);
-    z-index: 20; backdrop-filter: blur(14px);
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    z-index: 30; backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
     border-bottom: 1px solid var(--line);
   }
   .top-inner {
-    max-width: 620px; margin: 0 auto; padding: 16px 20px;
+    max-width: 640px; margin: 0 auto; padding: 14px 20px 0;
     display: flex; align-items: center; justify-content: space-between;
   }
   .brand { display: flex; align-items: center; gap: 10px; }
@@ -67,15 +68,38 @@
   .theme-toggle {
     width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line);
     background: var(--panel-2); color: var(--text-dim); display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 15px;
+    cursor: pointer; font-size: 15px; flex-shrink: 0;
   }
-  .hero { padding: 40px 0 28px; text-align: center; }
+  .subnav {
+    max-width: 640px; margin: 0 auto; padding: 12px 20px 12px;
+    display: flex; gap: 8px; overflow-x: auto;
+  }
+  .subnav::-webkit-scrollbar { display: none; }
+  .navbtn {
+    flex-shrink: 0; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--line);
+    background: var(--panel-2); color: var(--text-dim); font-size: 12.5px; font-weight: 600;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-body); white-space: nowrap;
+  }
+  .navbtn.active { background: var(--mint); color: #04140d; border-color: transparent; }
+  .navbtn:hover:not(.active) { border-color: var(--line-strong); color: var(--text); }
+
+  section { scroll-margin-top: 118px; }
+
+  .hero { padding: 36px 0 24px; text-align: center; }
   .hero h1 {
-    font-family: var(--font-display); font-weight: 700; font-size: 30px; margin: 0 0 8px;
+    font-family: var(--font-display); font-weight: 700; font-size: 28px; margin: 0 0 8px;
     letter-spacing: -0.01em;
   }
   .hero p { color: var(--text-dim); font-size: 14px; margin: 0; }
   .hero p strong { color: var(--mint); font-weight: 600; }
+
+  .section-head { padding: 44px 0 18px; }
+  .section-head h2 {
+    font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .section-head p { color: var(--text-dim); font-size: 13.5px; margin: 0; }
 
   .card {
     background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
@@ -110,13 +134,15 @@
     display: block; font-size: 10.5px; color: var(--text-faint); margin-bottom: 5px;
     font-weight: 500;
   }
-  .field input {
+  .field input, .field select, .field textarea {
     width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 9px;
     padding: 9px 10px; font-family: var(--font-mono); font-size: 14px; color: var(--text);
     transition: border-color .15s;
   }
-  .field input:focus { outline: none; border-color: var(--mint-dim); }
-  .field input::placeholder { color: var(--text-faint); }
+  .field textarea { font-family: var(--font-body); resize: vertical; min-height: 70px; }
+  .field select { font-family: var(--font-body); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--mint-dim); }
+  .field input::placeholder, .field textarea::placeholder { color: var(--text-faint); }
 
   .add-lot {
     width: 100%; padding: 11px; border-radius: 11px; border: 1px dashed var(--line-strong);
@@ -145,7 +171,9 @@
   .btn-ghost:hover { border-color: var(--line-strong); color: var(--text); }
   .btn-primary { background: var(--mint); color: #04140d; }
   .btn-primary:hover { background: #4ee9b0; }
+  .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
   .btn-primary:active, .btn-ghost:active { transform: scale(0.98); }
+  .btn-full { width: 100%; flex: none; margin-top: 4px; }
 
   .results { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
   .stat { background: var(--panel); padding: 18px 14px; text-align: center; }
@@ -184,6 +212,44 @@
     font-size: 12px; color: var(--text-faint); text-align: center; margin-top: 18px; line-height: 1.6;
   }
   .hidden { display: none !important; }
+
+  .item-card {
+    border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 10px;
+    background: var(--panel-2);
+  }
+  .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .item-title { font-family: var(--font-display); font-weight: 700; font-size: 14.5px; margin: 0; }
+  .badge {
+    font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-mint { background: color-mix(in srgb, var(--mint) 16%, transparent); color: var(--mint-dim); }
+  .badge-blue { background: color-mix(in srgb, var(--blue) 16%, transparent); color: var(--blue); }
+  .item-body { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin: 0 0 10px; white-space: pre-wrap; }
+  .item-body.clamped { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .item-foot { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--text-faint); }
+  .item-foot a, .item-foot button.linklike {
+    color: var(--mint-dim); text-decoration: none; font-weight: 600; background: none; border: none;
+    cursor: pointer; font-size: 11.5px; font-family: var(--font-body); padding: 0;
+  }
+  .item-foot .actions-mini { display: flex; gap: 12px; align-items: center; }
+  .del-btn { color: var(--text-faint); }
+  .del-btn:hover { color: var(--red); }
+
+  .empty-state {
+    text-align: center; padding: 28px 16px; color: var(--text-faint); font-size: 13px;
+  }
+  .toggle-form-btn {
+    background: none; border: 1px dashed var(--line-strong); color: var(--text-dim);
+    border-radius: 11px; padding: 11px; width: 100%; font-size: 13px; font-weight: 500;
+    cursor: pointer; margin-top: 4px;
+  }
+  .toggle-form-btn:hover { border-color: var(--mint-dim); color: var(--mint); }
+  .inline-error { color: var(--red); font-size: 12px; margin-top: 6px; }
+  .field-file {
+    border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; font-size: 13px;
+    background: var(--bg); color: var(--text-dim);
+  }
 </style>
 </head>
 <body>
@@ -198,65 +264,137 @@
     </div>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button>
   </div>
+  <nav class="subnav">
+    <a class="navbtn active" href="#calculator" data-nav="calculator">Calculator</a>
+    <a class="navbtn" href="#reports" data-nav="reports">Equity reports</a>
+    <a class="navbtn" href="#knowledge" data-nav="knowledge">Knowledge hub</a>
+  </nav>
 </header>
 
 <div class="wrap">
-  <div class="hero">
-    <h1>Stock average calculator</h1>
-    <p>Work out your <strong>average cost per share</strong> across multiple buys, and see how it stacks up against the market.</p>
-  </div>
 
-  <div class="card">
-    <div class="card-title">Your purchases <span class="count" id="lotCount">2 lots</span></div>
-    <div id="lots"></div>
-    <button class="add-lot" id="addLot" type="button">+ Add another purchase</button>
-
-    <div class="price-row">
-      <label for="curPrice">Current market price</label>
-      <input type="number" id="curPrice" step="any" placeholder="Optional">
+  <section id="calculator">
+    <div class="hero">
+      <h1>Stock average calculator</h1>
+      <p>Work out your <strong>average cost per share</strong> across multiple buys, and see how it stacks up against the market.</p>
     </div>
-  </div>
 
-  <div class="actions">
-    <button class="btn btn-ghost" id="btnClear" type="button">Clear all</button>
-    <button class="btn btn-primary" id="btnCalculate" type="button">Calculate average</button>
-  </div>
+    <div class="card">
+      <div class="card-title">Your purchases <span class="count" id="lotCount">2 lots</span></div>
+      <div id="lots"></div>
+      <button class="add-lot" id="addLot" type="button">+ Add another purchase</button>
 
-  <div class="card">
-    <div class="results">
-      <div class="stat">
-        <div class="lbl">Total units</div>
-        <div class="val" id="totalQty">0</div>
-      </div>
-      <div class="stat">
-        <div class="lbl">Average price</div>
-        <div class="val mint" id="avgPrice">0.00</div>
-      </div>
-      <div class="stat">
-        <div class="lbl">Total invested</div>
-        <div class="val" id="totalCost">0.00</div>
+      <div class="price-row">
+        <label for="curPrice">Current market price</label>
+        <input type="number" id="curPrice" step="any" placeholder="Optional">
       </div>
     </div>
 
-    <div class="gauge-wrap" id="gaugeSection">
-      <div class="gauge-labels">
-        <span id="gaugeLow">–</span>
-        <span id="gaugeHigh">–</span>
+    <div class="actions">
+      <button class="btn btn-ghost" id="btnClear" type="button">Clear all</button>
+      <button class="btn btn-primary" id="btnCalculate" type="button">Calculate average</button>
+    </div>
+
+    <div class="card">
+      <div class="results">
+        <div class="stat">
+          <div class="lbl">Total units</div>
+          <div class="val" id="totalQty">0</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Average price</div>
+          <div class="val mint" id="avgPrice">0.00</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Total invested</div>
+          <div class="val" id="totalCost">0.00</div>
+        </div>
       </div>
-      <div class="gauge">
-        <div class="gauge-fill" id="gaugeFill"></div>
-        <div class="gauge-marker" id="avgMarker"><span class="mk-label" id="avgMarkerLabel">avg</span></div>
-        <div class="gauge-marker cur hidden" id="curMarker"><span class="mk-label" id="curMarkerLabel">now</span></div>
+
+      <div class="gauge-wrap" id="gaugeSection">
+        <div class="gauge-labels">
+          <span id="gaugeLow">–</span>
+          <span id="gaugeHigh">–</span>
+        </div>
+        <div class="gauge">
+          <div class="gauge-fill" id="gaugeFill"></div>
+          <div class="gauge-marker" id="avgMarker"><span class="mk-label" id="avgMarkerLabel">avg</span></div>
+          <div class="gauge-marker cur hidden" id="curMarker"><span class="mk-label" id="curMarkerLabel">now</span></div>
+        </div>
+      </div>
+
+      <div class="pnl-row hidden" id="pnlRow">
+        <span class="pl-label">Unrealized P&amp;L at current price</span>
+        <span class="pl-val" id="pnlVal">0.00</span>
       </div>
     </div>
 
-    <div class="pnl-row hidden" id="pnlRow">
-      <span class="pl-label">Unrealized P&amp;L at current price</span>
-      <span class="pl-val" id="pnlVal">0.00</span>
-    </div>
-  </div>
+    <p class="note">Buying more shares at a lower price than your current average will pull the average down — this tool shows exactly where the new average lands.</p>
+  </section>
 
-  <p class="note">Buying more shares at a lower price than your current average will pull the average down — this tool shows exactly where the new average lands.</p>
+  <section id="reports">
+    <div class="section-head">
+      <h2>Equity research reports</h2>
+      <p>Upload PDF reports and pull them up whenever you need them.</p>
+    </div>
+
+    <div class="card">
+      <div id="reportsList"><div class="empty-state">Loading reports…</div></div>
+      <button class="toggle-form-btn" id="toggleReportForm" type="button">+ Upload a report</button>
+
+      <div id="reportForm" class="hidden" style="margin-top:14px;">
+        <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+          <div class="field"><label>Company / title</label><input type="text" id="repTitle" placeholder="e.g. Reliance Industries"></div>
+          <div class="field"><label>Ticker</label><input type="text" id="repTicker" placeholder="e.g. RELIANCE"></div>
+        </div>
+        <div class="field" style="margin-bottom:10px;">
+          <label>Summary</label>
+          <textarea id="repSummary" placeholder="One or two lines on the thesis or key takeaway"></textarea>
+        </div>
+        <div class="field" style="margin-bottom:6px;">
+          <label>PDF file</label>
+          <input type="file" id="repFile" accept="application/pdf" class="field-file">
+        </div>
+        <div class="inline-error hidden" id="repError"></div>
+        <button class="btn btn-primary btn-full" id="repSubmit" type="button">Save report</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="knowledge">
+    <div class="section-head">
+      <h2>Financial knowledge hub</h2>
+      <p>Notes, frameworks and concepts worth remembering.</p>
+    </div>
+
+    <div class="card">
+      <div id="knowledgeList"><div class="empty-state">Loading notes…</div></div>
+      <button class="toggle-form-btn" id="toggleKnowledgeForm" type="button">+ Add a note</button>
+
+      <div id="knowledgeForm" class="hidden" style="margin-top:14px;">
+        <div class="fields" style="grid-template-columns:1fr 1fr; margin-bottom:10px;">
+          <div class="field"><label>Title</label><input type="text" id="knTitle" placeholder="e.g. Reading a DCF"></div>
+          <div class="field">
+            <label>Category</label>
+            <select id="knCategory">
+              <option>Fundamentals</option>
+              <option>Technicals</option>
+              <option>Valuation</option>
+              <option>Macro</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:6px;">
+          <label>Notes</label>
+          <textarea id="knBody" placeholder="Write out the concept, formula, or takeaway" style="min-height:100px;"></textarea>
+        </div>
+        <div class="inline-error hidden" id="knError"></div>
+        <button class="btn btn-primary btn-full" id="knSubmit" type="button">Save note</button>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script>
@@ -421,6 +559,289 @@
   addLot(10, 145.30);
   addLot(15, 132.75);
   runCostAveraging();
+
+  var navLinks = document.querySelectorAll('.navbtn');
+  var sections = ['calculator', 'reports', 'knowledge'].map(function(id) { return document.getElementById(id); });
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      link.classList.add('active');
+    });
+  });
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function(l) {
+            l.classList.toggle('active', l.getAttribute('data-nav') === id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(function(s) { if (s) observer.observe(s); });
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  function formatDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  var dbNs = null;
+  var assetsNs = null;
+  var backendReady = false;
+  var isEditor = false;
+
+  function initBackend() {
+    if (!window.claude || typeof window.claude.use !== 'function') {
+      showBackendUnavailable();
+      return;
+    }
+    Promise.all([window.claude.use('db'), window.claude.use('assets'), window.claude.use('user')]).then(function(res) {
+      dbNs = res[0];
+      assetsNs = res[1];
+      var userNs = res[2];
+      if (!dbNs) {
+        showBackendUnavailable();
+        return;
+      }
+      backendReady = true;
+      try { isEditor = !!(userNs && userNs.canEdit && userNs.canEdit()); } catch (e) { isEditor = false; }
+      if (!isEditor) {
+        document.getElementById('toggleReportForm').classList.add('hidden');
+        document.getElementById('toggleKnowledgeForm').classList.add('hidden');
+      }
+      subscribeReports();
+      subscribeKnowledge();
+    }).catch(function() {
+      showBackendUnavailable();
+    });
+  }
+
+  function showBackendUnavailable() {
+    document.getElementById('reportsList').innerHTML = '<div class="empty-state">Saved reports will show up here once this page is opened on claude.ai.</div>';
+    document.getElementById('knowledgeList').innerHTML = '<div class="empty-state">Saved notes will show up here once this page is opened on claude.ai.</div>';
+    document.getElementById('toggleReportForm').classList.add('hidden');
+    document.getElementById('toggleKnowledgeForm').classList.add('hidden');
+  }
+
+  function toggleForm(btnId, formId) {
+    var btn = document.getElementById(btnId);
+    var form = document.getElementById(formId);
+    btn.addEventListener('click', function() {
+      form.classList.toggle('hidden');
+      btn.textContent = form.classList.contains('hidden') ? btn.dataset.openLabel : 'Cancel';
+    });
+    btn.dataset.openLabel = btn.textContent;
+  }
+  toggleForm('toggleReportForm', 'reportForm');
+  toggleForm('toggleKnowledgeForm', 'knowledgeForm');
+
+  function subscribeReports() {
+    dbNs.collection('reports').orderBy('createdAt', 'desc').limit(50).onSnapshot(function(snap) {
+      var list = document.getElementById('reportsList');
+      if (!snap.docs || snap.docs.length === 0) {
+        list.innerHTML = '<div class="empty-state">No reports uploaded yet.</div>';
+        return;
+      }
+      list.innerHTML = snap.docs.map(function(doc) {
+        var d = doc.data();
+        return '<div class="item-card">' +
+          '<div class="item-top">' +
+            '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
+            (d.ticker ? '<span class="badge badge-mint">' + escapeHtml(d.ticker) + '</span>' : '') +
+          '</div>' +
+          (d.summary ? '<p class="item-body">' + escapeHtml(d.summary) + '</p>' : '') +
+          '<div class="item-foot">' +
+            '<span>' + formatDate(d.createdAt) + '</span>' +
+            '<div class="actions-mini">' +
+              (d.url ? '<a href="' + d.url + '" target="_blank" rel="noopener">Open PDF</a>' : '') +
+              (isEditor ? '<button type="button" class="linklike del-btn" data-del-report="' + doc.id + '" data-asset="' + (d.assetId || '') + '">Delete</button>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }, function() {
+      document.getElementById('reportsList').innerHTML = '<div class="empty-state">Couldn\'t load reports right now.</div>';
+    });
+  }
+
+  function subscribeKnowledge() {
+    dbNs.collection('knowledge').orderBy('createdAt', 'desc').limit(100).onSnapshot(function(snap) {
+      var list = document.getElementById('knowledgeList');
+      if (!snap.docs || snap.docs.length === 0) {
+        list.innerHTML = '<div class="empty-state">No notes yet.</div>';
+        return;
+      }
+      list.innerHTML = snap.docs.map(function(doc) {
+        var d = doc.data();
+        return '<div class="item-card">' +
+          '<div class="item-top">' +
+            '<p class="item-title">' + escapeHtml(d.title || 'Untitled') + '</p>' +
+            (d.category ? '<span class="badge badge-blue">' + escapeHtml(d.category) + '</span>' : '') +
+          '</div>' +
+          '<p class="item-body clamped" data-full="' + escapeHtml(d.body || '') + '">' + escapeHtml(d.body || '') + '</p>' +
+          '<div class="item-foot">' +
+            '<span>' + formatDate(d.createdAt) + '</span>' +
+            '<div class="actions-mini">' +
+              '<button type="button" class="linklike" data-expand>Read more</button>' +
+              (isEditor ? '<button type="button" class="linklike del-btn" data-del-knowledge="' + doc.id + '">Delete</button>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }, function() {
+      document.getElementById('knowledgeList').innerHTML = '<div class="empty-state">Couldn\'t load notes right now.</div>';
+    });
+  }
+
+  document.getElementById('reportsList').addEventListener('click', function(e) {
+    var expandBtn = e.target.closest('[data-expand]');
+    if (expandBtn) {
+      var body = expandBtn.closest('.item-card').querySelector('.item-body');
+      body.classList.toggle('clamped');
+      expandBtn.textContent = body.classList.contains('clamped') ? 'Read more' : 'Show less';
+      return;
+    }
+    var delBtn = e.target.closest('[data-del-report]');
+    if (delBtn && dbNs) {
+      var id = delBtn.getAttribute('data-del-report');
+      var assetId = delBtn.getAttribute('data-asset');
+      dbNs.collection('reports').doc(id).delete().catch(function() {});
+      if (assetId && assetsNs) assetsNs.delete(assetId).catch(function() {});
+    }
+  });
+
+  document.getElementById('knowledgeList').addEventListener('click', function(e) {
+    var expandBtn = e.target.closest('[data-expand]');
+    if (expandBtn) {
+      var body = expandBtn.closest('.item-card').querySelector('.item-body');
+      body.classList.toggle('clamped');
+      expandBtn.textContent = body.classList.contains('clamped') ? 'Read more' : 'Show less';
+      return;
+    }
+    var delBtn = e.target.closest('[data-del-knowledge]');
+    if (delBtn && dbNs) {
+      var id = delBtn.getAttribute('data-del-knowledge');
+      dbNs.collection('knowledge').doc(id).delete().catch(function() {});
+    }
+  });
+
+  var repSubmit = document.getElementById('repSubmit');
+  repSubmit.addEventListener('click', function() {
+    var titleEl = document.getElementById('repTitle');
+    var tickerEl = document.getElementById('repTicker');
+    var summaryEl = document.getElementById('repSummary');
+    var fileEl = document.getElementById('repFile');
+    var errEl = document.getElementById('repError');
+    errEl.classList.add('hidden');
+
+    var title = titleEl.value.trim();
+    var file = fileEl.files && fileEl.files[0];
+
+    if (!title) {
+      errEl.textContent = 'Enter a title first';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (!file) {
+      errEl.textContent = 'Choose a PDF file first';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (!backendReady || !assetsNs || !dbNs) {
+      errEl.textContent = 'Saving is unavailable in this view right now';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    repSubmit.disabled = true;
+    repSubmit.textContent = 'Uploading…';
+
+    assetsNs.upload(file, { type: 'application/pdf' }).then(function(res) {
+      return dbNs.collection('reports').add({
+        title: title,
+        ticker: tickerEl.value.trim(),
+        summary: summaryEl.value.trim(),
+        assetId: res.id,
+        url: res.url,
+        sizeBytes: res.sizeBytes,
+        createdAt: new Date().toISOString()
+      });
+    }).then(function() {
+      titleEl.value = '';
+      tickerEl.value = '';
+      summaryEl.value = '';
+      fileEl.value = '';
+      document.getElementById('reportForm').classList.add('hidden');
+      document.getElementById('toggleReportForm').textContent = document.getElementById('toggleReportForm').dataset.openLabel;
+    }).catch(function(err) {
+      errEl.textContent = (err && err.message) ? err.message : 'Could not save this report';
+      errEl.classList.remove('hidden');
+    }).finally(function() {
+      repSubmit.disabled = false;
+      repSubmit.textContent = 'Save report';
+    });
+  });
+
+  var knSubmit = document.getElementById('knSubmit');
+  knSubmit.addEventListener('click', function() {
+    var titleEl = document.getElementById('knTitle');
+    var catEl = document.getElementById('knCategory');
+    var bodyEl = document.getElementById('knBody');
+    var errEl = document.getElementById('knError');
+    errEl.classList.add('hidden');
+
+    var title = titleEl.value.trim();
+    var body = bodyEl.value.trim();
+
+    if (!title) {
+      errEl.textContent = 'Enter a title first';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (!body) {
+      errEl.textContent = 'Write something in the notes field first';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (!backendReady || !dbNs) {
+      errEl.textContent = 'Saving is unavailable in this view right now';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    knSubmit.disabled = true;
+    knSubmit.textContent = 'Saving…';
+
+    dbNs.collection('knowledge').add({
+      title: title,
+      category: catEl.value,
+      body: body,
+      createdAt: new Date().toISOString()
+    }).then(function() {
+      titleEl.value = '';
+      bodyEl.value = '';
+      document.getElementById('knowledgeForm').classList.add('hidden');
+      document.getElementById('toggleKnowledgeForm').textContent = document.getElementById('toggleKnowledgeForm').dataset.openLabel;
+    }).catch(function(err) {
+      errEl.textContent = (err && err.message) ? err.message : 'Could not save this note';
+      errEl.classList.remove('hidden');
+    }).finally(function() {
+      knSubmit.disabled = false;
+      knSubmit.textContent = 'Save note';
+    });
+  });
+
+  initBackend();
 })();
 </script>
 </body>
